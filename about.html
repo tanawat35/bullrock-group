@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เกี่ยวกับเรา — BULLROCK EXPRESS | โลจิสติกส์ครบวงจร</title>
+  <meta name="description" content="BULLROCK EXPRESS ผู้ให้บริการโลจิสติกส์แบบครบวงจร ก่อตั้งด้วยความมุ่งมั่นพัฒนาระบบขนส่งและคลังสินค้าไทย ด้วยมาตรฐานระดับองค์กรในราคาที่เข้าถึงได้">
+  <meta property="og:title" content="เกี่ยวกับเรา — BULLROCK EXPRESS">
+  <meta property="og:description" content="รู้จัก BULLROCK EXPRESS พันธมิตรโลจิสติกส์ที่คุณวางใจได้ — วิสัยทัศน์ พันธกิจ และค่านิยมองค์กร">
+  <meta property="og:url" content="http://www.bullrock-group.com/about.html">
+  <meta property="og:image" content="http://www.bullrock-group.com/assets/hero-bg.jpg">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="http://www.bullrock-group.com/about.html">
+  <link rel="icon" href="assets/logo-bullrock.png" type="image/png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ====================== CSS VARIABLES ====================== */
+    :root {
+      --navy:        #1B2D6B;
+      --navy-dark:   #0F1B4A;
+      --navy-mid:    #162358;
+      --navy-light:  #243980;
+      --gold:        #F5A900;
+      --gold-dark:   #C68D00;
+      --gold-light:  #FFD000;
+      --green:       #16A34A;
+      --green-light: #22C55E;
+      --green-bg:    #F0FDF4;
+      --text:        #0F172A;
+      --text-mid:    #475569;
+      --text-muted:  #94A3B8;
+      --off-white:   #F8F9FC;
+      --border:      #E2E8F0;
+      --shadow-sm:   0 2px 8px rgba(15,27,74,0.07);
+      --shadow-md:   0 8px 24px rgba(15,27,74,0.11);
+      --shadow-lg:   0 16px 48px rgba(15,27,74,0.16);
+      --shadow-xl:   0 32px 80px rgba(15,27,74,0.22);
+      --shadow-gold: 0 8px 32px rgba(245,169,0,0.32);
+      --font-head:   'Prompt', sans-serif;
+      --font-body:   'Sarabun', sans-serif;
+      --radius-sm:   8px;
+      --radius-md:   16px;
+      --radius-lg:   24px;
+      --radius-xl:   32px;
+      --radius-pill: 9999px;
+      --ease:        cubic-bezier(0.25,0.46,0.45,0.94);
+      --ease-bounce: cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* ====================== RESET ====================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--font-body); color: var(--text); background: white; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+    img { max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ====================== UTILITIES ====================== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-header { margin-bottom: 60px; }
+    .section-header.center { text-align: center; }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.875rem, 4vw, 2.75rem);
+      font-weight: 800; line-height: 1.18;
+      color: var(--navy-dark); letter-spacing: -0.02em;
+    }
+    .section-title.light { color: white; }
+    .section-sub { font-size: 1.0625rem; color: var(--text-mid); line-height: 1.7; margin-top: 16px; }
+    .section-sub.light { color: rgba(255,255,255,0.6); }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 13px; border-radius: var(--radius-pill);
+      font-family: var(--font-head); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .tag-navy  { background: rgba(27,45,107,0.08); color: var(--navy); }
+    .tag-white { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+    .tag-gold  { background: rgba(245,169,0,0.12); color: var(--gold-dark); }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-size: 0.9375rem; font-weight: 700;
+      border-radius: var(--radius-pill); box-shadow: var(--shadow-gold);
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(245,169,0,0.40); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px; border: 2px solid rgba(255,255,255,0.35);
+      color: white; font-family: var(--font-head); font-size: 0.9375rem; font-weight: 600;
+      border-radius: var(--radius-pill);
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); background: rgba(245,169,0,0.08); transform: translateY(-2px); }
+
+    /* ====================== REVEAL ====================== */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+
+    /* ====================== NAVBAR ====================== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 0; transition: background 0.35s, box-shadow 0.35s;
+    }
+    .navbar.scrolled {
+      background: var(--navy-dark);
+      box-shadow: 0 4px 24px rgba(10,18,52,0.35);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; gap: 32px;
+    }
+    .nav-logo img { height: 38px; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-head); font-size: 0.875rem; font-weight: 600;
+      color: rgba(255,255,255,0.75); padding: 8px 14px; border-radius: var(--radius-pill);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: white; background: rgba(255,255,255,0.1); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-size: 0.825rem; font-weight: 700;
+      border-radius: var(--radius-pill); transition: background 0.25s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta svg { width: 14px; height: 14px; }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      width: 36px; height: 36px; padding: 6px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.08); transition: background 0.2s;
+    }
+    .nav-hamburger span {
+      display: block; height: 2px; border-radius: 2px;
+      background: rgba(255,255,255,0.75); transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ====================== PAGE HERO ====================== */
+    .page-hero {
+      background: var(--navy-dark); padding: 130px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 100% 50%, rgba(27,45,107,0.8) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 0% 80%, rgba(245,169,0,0.07) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .page-hero-dots {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 40px;
+    }
+    .page-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800; line-height: 1.15;
+      color: white; letter-spacing: -0.02em; margin-bottom: 18px;
+    }
+    .page-hero h1 em { color: var(--gold); font-style: normal; }
+    .page-hero-sub { font-size: 1.0625rem; color: rgba(255,255,255,0.6); line-height: 1.75; max-width: 540px; }
+    .page-hero-stats { display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; }
+    .ph-stat {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-md); padding: 18px 24px; text-align: center; min-width: 130px;
+    }
+    .ph-stat-num { font-family: var(--font-head); font-size: 1.75rem; font-weight: 800; color: var(--gold); line-height: 1; }
+    .ph-stat-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 5px; }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 24px;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb svg { width: 12px; height: 12px; }
+
+    /* ====================== STORY SECTION ====================== */
+    .story { background: white; padding: 100px 0; }
+    .story-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .story-img-wrap {
+      position: relative; border-radius: var(--radius-xl); overflow: hidden;
+    }
+    .story-img-wrap img {
+      width: 100%; height: 420px; object-fit: cover; display: block;
+      border-radius: var(--radius-xl);
+    }
+    .story-img-badge {
+      position: absolute; bottom: 28px; left: 28px;
+      background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+      padding: 14px 22px; border-radius: var(--radius-md);
+      box-shadow: var(--shadow-gold);
+    }
+    .story-img-badge span { display: block; font-size: 0.72rem; font-weight: 600; opacity: 0.75; margin-top: 2px; }
+    .story-img-accent {
+      position: absolute; top: -20px; right: -20px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(27,45,107,0.06); border: 2px solid rgba(27,45,107,0.10);
+    }
+    .story-content .tag { margin-bottom: 20px; }
+    .story-content p {
+      font-size: 1.025rem; color: var(--text-mid); line-height: 1.85;
+      margin-bottom: 18px;
+    }
+    .story-content p:last-of-type { margin-bottom: 0; }
+    .story-highlight {
+      margin: 28px 0; padding: 22px 26px;
+      background: rgba(27,45,107,0.04); border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .story-highlight p {
+      font-family: var(--font-head); font-size: 1.05rem; font-weight: 600;
+      color: var(--navy-dark); line-height: 1.6; margin: 0;
+    }
+
+    /* ====================== NUMBERS ====================== */
+    .numbers { background: var(--navy-dark); padding: 80px 0; position: relative; overflow: hidden; }
+    .numbers::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(245,169,0,0.06) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .numbers-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; position: relative; z-index: 1; }
+    .num-card {
+      text-align: center; padding: 40px 24px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .num-card:last-child { border-right: none; }
+    .num-value {
+      font-family: var(--font-head); font-size: clamp(2.5rem,5vw,3.5rem);
+      font-weight: 900; color: var(--gold); line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .num-label {
+      font-family: var(--font-head); font-size: 0.875rem; font-weight: 600;
+      color: rgba(255,255,255,0.55); margin-top: 10px; line-height: 1.4;
+    }
+    .num-sub { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+    /* ====================== MISSION & VISION ====================== */
+    .mv { background: var(--off-white); padding: 100px 0; }
+    .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .mv-card {
+      background: white; border-radius: var(--radius-xl);
+      padding: 48px 40px; box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border);
+      transition: box-shadow 0.35s, transform 0.35s, border-color 0.35s;
+      position: relative; overflow: hidden;
+    }
+    .mv-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: rgba(27,45,107,0.18); }
+    .mv-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    }
+    .mv-card.mission::before { background: linear-gradient(90deg, var(--navy), var(--navy-light)); }
+    .mv-card.vision::before  { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .mv-icon {
+      width: 56px; height: 56px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+    .mv-card.mission .mv-icon { background: rgba(27,45,107,0.08); color: var(--navy); }
+    .mv-card.vision  .mv-icon { background: rgba(245,169,0,0.1); color: var(--gold-dark); }
+    .mv-icon svg { width: 28px; height: 28px; }
+    .mv-label {
+      font-family: var(--font-head); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .mv-card.mission .mv-label { color: var(--navy); }
+    .mv-card.vision  .mv-label { color: var(--gold-dark); }
+    .mv-title { font-family: var(--font-head); font-size: 1.375rem; font-weight: 800; color: var(--navy-dark); margin-bottom: 16px; line-height: 1.3; }
+    .mv-body { font-size: 0.975rem; color: var(--text-mid); line-height: 1.8; }
+
+    /* ====================== CORE VALUES ====================== */
+    .values { background: white; padding: 100px 0; }
+    .values-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; }
+    .val-card {
+      padding: 32px 24px; border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); background: white;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .val-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .val-num {
+      font-family: var(--font-head); font-size: 2.25rem; font-weight: 900;
+      color: rgba(27,45,107,0.06); line-height: 1; letter-spacing: -0.05em;
+    }
+    .val-icon {
+      width: 48px; height: 48px; border-radius: var(--radius-sm);
+      background: rgba(245,169,0,0.1); color: var(--gold-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .val-icon svg { width: 22px; height: 22px; }
+    .val-title { font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; color: var(--navy-dark); }
+    .val-desc { font-size: 0.875rem; color: var(--text-mid); line-height: 1.7; }
+
+    /* ====================== CERTIFICATIONS ====================== */
+    .certs { background: var(--off-white); padding: 90px 0; }
+    .certs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .cert-card {
+      background: white; border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); padding: 32px 28px;
+      display: flex; align-items: flex-start; gap: 20px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .cert-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); }
+    .cert-ico {
+      flex-shrink: 0; width: 52px; height: 52px; border-radius: var(--radius-md);
+      background: rgba(27,45,107,0.06); display: flex; align-items: center; justify-content: center;
+      color: var(--navy);
+    }
+    .cert-ico svg { width: 24px; height: 24px; }
+    .cert-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px; }
+    .cert-desc { font-size: 0.875rem; color: var(--text-mid); line-height: 1.65; }
+    .cert-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 10px; padding: 3px 10px; border-radius: var(--radius-pill);
+      background: var(--green-bg); color: var(--green);
+      font-family: var(--font-head); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .cert-badge svg { width: 10px; height: 10px; }
+
+    /* ====================== GROUP SECTION ====================== */
+    .group { background: var(--navy-dark); padding: 100px 0; position: relative; overflow: hidden; }
+    .group::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 70% at 5% 50%, rgba(245,169,0,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 60% at 95% 20%, rgba(27,45,107,0.5) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .group-inner { position: relative; z-index: 1; }
+    .group-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+    .group-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl); padding: 36px 32px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .group-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(245,169,0,0.25); transform: translateY(-4px); }
+    .group-card-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: var(--radius-pill);
+      font-family: var(--font-head); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    .badge-express { background: rgba(245,169,0,0.15); color: var(--gold); border: 1px solid rgba(245,169,0,0.25); }
+    .badge-holding { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.12); }
+    .badge-onego   { background: rgba(22,163,74,0.15); color: #4ade80; border: 1px solid rgba(22,163,74,0.25); }
+    .group-card-ico {
+      width: 52px; height: 52px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+    .ico-express { background: rgba(245,169,0,0.12); color: var(--gold); }
+    .ico-holding { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.7); }
+    .ico-onego   { background: rgba(22,163,74,0.12); color: #4ade80; }
+    .group-card-ico svg { width: 24px; height: 24px; }
+    .group-card-title { font-family: var(--font-head); font-size: 1.125rem; font-weight: 800; color: white; margin-bottom: 10px; }
+    .group-card-desc { font-size: 0.875rem; color: rgba(255,255,255,0.45); line-height: 1.75; }
+
+    /* ====================== CTA BANNER ====================== */
+    .cta-banner { background: var(--navy); padding: 80px 0; position: relative; overflow: hidden; }
+    .cta-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 55% 100% at 100% 50%, rgba(245,169,0,0.08) 0%, transparent 60%);
+    }
+    .cta-inner { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+    .cta-text h2 { font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: white; line-height: 1.25; margin-bottom: 10px; }
+    .cta-text p { font-size: 1rem; color: rgba(255,255,255,0.55); }
+    .cta-actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .cta-tel { display: flex; align-items: center; gap: 8px; font-family: var(--font-head); font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.6); }
+    .cta-tel svg { width: 16px; height: 16px; color: var(--gold); }
+    .cta-tel a { color: white; transition: color 0.2s; }
+    .cta-tel a:hover { color: var(--gold); }
+
+    /* ====================== FOOTER ====================== */
+    footer { background: var(--navy-dark); padding: 64px 0 32px; position: relative; }
+    footer::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(245,169,0,0.35),transparent); }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1.2fr; gap:48px; margin-bottom:48px; }
+    .footer-logo img { height:38px; margin-bottom:14px; }
+    .footer-tagline { font-size:0.875rem; color:rgba(255,255,255,0.45); line-height:1.8; max-width:240px; }
+    .footer-col-hd { font-family:var(--font-head); font-size:0.75rem; font-weight:700; color:var(--gold); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:16px; }
+    .footer-ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-ul a { font-size:0.875rem; color:rgba(255,255,255,0.45); transition:color 0.2s, padding-left 0.2s; }
+    .footer-ul a:hover { color:rgba(255,255,255,0.85); padding-left:5px; }
+    .fci { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .fci svg { width:15px; height:15px; color:var(--gold); flex-shrink:0; margin-top:3px; }
+    .fci span, .fci a { font-size:0.875rem; color:rgba(255,255,255,0.45); line-height:1.55; transition:color 0.2s; }
+    .fci a:hover { color:var(--gold); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,0.07); padding-top:24px; display:flex; align-items:center; justify-content:space-between; }
+    .footer-copy { font-size:0.8rem; color:rgba(255,255,255,0.3); }
+
+    /* ====================== RESPONSIVE ====================== */
+    @media (max-width: 1100px) {
+      .values-grid { grid-template-columns: repeat(2,1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 900px) {
+      .page-hero-inner { grid-template-columns: 1fr; }
+      .page-hero-stats { flex-direction: row; }
+      .story-grid { grid-template-columns: 1fr; gap: 48px; }
+      .story-img-wrap img { height: 300px; }
+      .numbers-grid { grid-template-columns: repeat(2,1fr); }
+      .num-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .mv-grid { grid-template-columns: 1fr; }
+      .certs-grid { grid-template-columns: 1fr 1fr; }
+      .group-cards { grid-template-columns: 1fr; }
+      .cta-inner { flex-direction: column; text-align: center; }
+      .cta-actions { justify-content: center; }
+    }
+    @media (max-width: 768px) {
+      .values-grid { grid-template-columns: 1fr; }
+      .certs-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-hero-stats { display: none; }
+      .numbers-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo-bullrock.png" alt="BULLROCK EXPRESS Logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="services.html">บริการ</a></li>
+        <li><a href="about.html" class="active">เกี่ยวกับเรา</a></li>
+        <li><a href="contact.html">ติดต่อ</a></li>
+      </ul>
+      <a href="contact.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        ขอใบเสนอราคา
+      </a>
+      <button class="nav-hamburger" id="hamburger" aria-label="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-dots"></div>
+  <div class="container">
+    <div class="breadcrumb reveal">
+      <a href="index.html">หน้าแรก</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      <span>เกี่ยวกับเรา</span>
+    </div>
+    <div class="page-hero-inner">
+      <div>
+        <div class="reveal" style="margin-bottom:16px;">
+          <span class="tag tag-gold">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            พันธมิตรที่คุณวางใจได้
+          </span>
+        </div>
+        <h1 class="reveal d1">เกี่ยวกับ<br><em>BULLROCK EXPRESS</em></h1>
+        <p class="page-hero-sub reveal d2">
+          เราคือผู้ให้บริการโลจิสติกส์แบบครบวงจร ก่อตั้งด้วยความมุ่งมั่นที่จะยกระดับมาตรฐานการขนส่งและคลังสินค้าของไทย ด้วยเทคโนโลยี ทีมงานมืออาชีพ และหัวใจบริการที่แท้จริง
+        </p>
+      </div>
+      <div class="page-hero-stats reveal d3">
+        <div class="ph-stat">
+          <div class="ph-stat-num">5+</div>
+          <div class="ph-stat-lbl">ปีประสบการณ์</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-num">50+</div>
+          <div class="ph-stat-lbl">คันในกองรถ</div>
+        </div>
+        <div class="ph-stat">
+          <div class="ph-stat-num">100+</div>
+          <div class="ph-stat-lbl">ลูกค้าองค์กร</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img-wrap reveal">
+        <div class="story-img-accent"></div>
+        <img src="assets/hero-bg.jpg" alt="BULLROCK EXPRESS — ประวัติบริษัท" loading="lazy">
+        <div class="story-img-badge">
+          ก่อตั้ง 2562
+          <span>BULLROCK GROUP</span>
+        </div>
+      </div>
+      <div class="story-content">
+        <div class="tag tag-navy reveal">เรื่องราวของเรา</div>
+        <h2 class="section-title reveal d1" style="margin:16px 0 24px;">จากความฝัน<br>สู่พันธมิตรโลจิสติกส์</h2>
+        <p class="reveal d2">
+          BULLROCK EXPRESS ก่อตั้งขึ้นในปี 2562 ด้วยความเชื่อมั่นว่าธุรกิจไทยทุกขนาด ควรได้รับบริการขนส่งและคลังสินค้าที่มีคุณภาพระดับมืออาชีพ ในราคาที่เหมาะสมและโปร่งใส
+        </p>
+        <div class="story-highlight reveal d2">
+          <p>"เราไม่ได้แค่ขนส่งสินค้า — เราขนส่งความไว้วางใจของลูกค้า ทุกการส่งมอบคือพันธสัญญาที่เราให้ความสำคัญ"</p>
+        </div>
+        <p class="reveal d3">
+          ปัจจุบันเราเติบโตขึ้นเป็นกลุ่มบริษัทโลจิสติกส์ที่ครบวงจร ภายใต้ BULLROCK GROUP ประกอบด้วย BULLROCK EXPRESS ด้านขนส่งและคลังสินค้า BULLROCK HOLDING ด้านการลงทุน และ ONE GO ผู้ให้บริการโซลูชันโลจิสติกส์รูปแบบใหม่
+        </p>
+        <p class="reveal d3">
+          กองรถกว่า 50 คัน ทีมงานกว่า 100 ชีวิต และลูกค้าองค์กรกว่า 100 ราย คือเครื่องพิสูจน์ว่าเราพร้อมเป็นพันธมิตรระยะยาวของธุรกิจคุณ
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers">
+  <div class="container">
+    <div class="numbers-grid">
+      <div class="num-card reveal">
+        <div class="num-value">5+</div>
+        <div class="num-label">ปีประสบการณ์<br>ในอุตสาหกรรม</div>
+        <div class="num-sub">ก่อตั้ง 2562</div>
+      </div>
+      <div class="num-card reveal d1">
+        <div class="num-value">50+</div>
+        <div class="num-label">คันในกองรถ<br>ทุกขนาด</div>
+        <div class="num-sub">Cold Chain + แห้ง</div>
+      </div>
+      <div class="num-card reveal d2">
+        <div class="num-value">100+</div>
+        <div class="num-label">ลูกค้าองค์กร<br>ที่ไว้วางใจเรา</div>
+        <div class="num-sub">B2B &amp; Enterprise</div>
+      </div>
+      <div class="num-card reveal d3">
+        <div class="num-value">24/7</div>
+        <div class="num-label">พร้อมให้บริการ<br>ตลอดเวลา</div>
+        <div class="num-sub">365 วัน/ปี</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MISSION & VISION -->
+<section class="mv">
+  <div class="container">
+    <div class="section-header center">
+      <div class="tag tag-navy reveal">พันธกิจ &amp; วิสัยทัศน์</div>
+      <h2 class="section-title reveal d1" style="margin-top:12px;">ทิศทางที่ชัดเจน<br>เป้าหมายที่มั่นคง</h2>
+      <p class="section-sub reveal d2">ทุกการตัดสินใจของเราถูกชี้นำด้วยพันธกิจและวิสัยทัศน์ที่ชัดเจน</p>
+    </div>
+    <div class="mv-grid">
+      <div class="mv-card mission reveal">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="mv-label">พันธกิจ · Mission</div>
+        <div class="mv-title">ยกระดับโลจิสติกส์ไทย<br>ด้วยมาตรฐานสากล</div>
+        <div class="mv-body">มุ่งมั่นให้บริการขนส่งและคลังสินค้าที่มีคุณภาพ ปลอดภัย ตรงเวลา และโปร่งใส เพื่อเป็นพันธมิตรโลจิสติกส์ที่ธุรกิจไทยทุกขนาดวางใจได้ในระยะยาว โดยไม่ต้องแลกมาด้วยต้นทุนที่สูงเกินจริง</div>
+      </div>
+      <div class="mv-card vision reveal d1">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="mv-label">วิสัยทัศน์ · Vision</div>
+        <div class="mv-title">ผู้นำโลจิสติกส์ครบวงจร<br>แห่งภูมิภาคอาเซียน</div>
+        <div class="mv-body">ภายในปี 2573 BULLROCK GROUP จะเป็นผู้นำในการให้บริการโลจิสติกส์แบบครบวงจรในภูมิภาคอาเซียน ด้วยเทคโนโลยีที่ทันสมัย เครือข่ายที่แข็งแกร่ง และมาตรฐานบริการระดับสากล</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE VALUES -->
+<section class="values">
+  <div class="container">
+    <div class="section-header center">
+      <div class="tag tag-navy reveal">ค่านิยมองค์กร</div>
+      <h2 class="section-title reveal d1" style="margin-top:12px;">4 หลักยึดที่ขับเคลื่อน<br>ทุกสิ่งที่เราทำ</h2>
+    </div>
+    <div class="values-grid">
+      <div class="val-card reveal">
+        <div class="val-num">01</div>
+        <div class="val-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="val-title">ความน่าเชื่อถือ</div>
+        <div class="val-desc">ทำตามที่สัญญา ส่งตรงเวลา รายงานตรงไปตรงมา ไม่มีข้อมูลซ่อนเร้น สินค้าทุกชิ้นคือความรับผิดชอบของเรา</div>
+      </div>
+      <div class="val-card reveal d1">
+        <div class="val-num">02</div>
+        <div class="val-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="val-title">ประสิทธิภาพ</div>
+        <div class="val-desc">ใช้เทคโนโลยี TMS และ GPS เพื่อเพิ่มประสิทธิภาพทุกเส้นทาง ลดต้นทุน ลดของเสีย และส่งมอบคุณค่าสูงสุดให้ลูกค้า</div>
+      </div>
+      <div class="val-card reveal d2">
+        <div class="val-num">03</div>
+        <div class="val-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="val-title">มุ่งเน้นลูกค้า</div>
+        <div class="val-desc">ทุกกระบวนการออกแบบมาเพื่อความสะดวกและความพึงพอใจของลูกค้า พร้อมปรับตัวตามความต้องการที่เปลี่ยนแปลง</div>
+      </div>
+      <div class="val-card reveal d3">
+        <div class="val-num">04</div>
+        <div class="val-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
+        <div class="val-title">การพัฒนาต่อเนื่อง</div>
+        <div class="val-desc">ไม่หยุดพัฒนาตนเอง ทั้งด้านเทคโนโลยี กระบวนการทำงาน และศักยภาพของทีมงาน เพื่อก้าวทันโลกโลจิสติกส์ที่เปลี่ยนแปลงอยู่ตลอดเวลา</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="certs">
+  <div class="container">
+    <div class="section-header center">
+      <div class="tag tag-navy reveal">มาตรฐานและการรับรอง</div>
+      <h2 class="section-title reveal d1" style="margin-top:12px;">ดำเนินงานตามมาตรฐาน<br>ที่ได้รับการยอมรับ</h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div>
+          <div class="cert-title">GMP / FSSC 22000</div>
+          <div class="cert-desc">คลัง Cold Chain ดำเนินงานตามมาตรฐาน Good Manufacturing Practice และ Food Safety System Certification 22000 เพื่อความปลอดภัยสูงสุดของสินค้าอาหารและยา</div>
+          <div class="cert-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>ได้รับการรับรอง</div>
+        </div>
+      </div>
+      <div class="cert-card reveal d1">
+        <div class="cert-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="cert-title">ประกันภัยขนส่งสินค้า</div>
+          <div class="cert-desc">สินค้าทุกชิ้นที่อยู่ในความดูแลของเราได้รับความคุ้มครองจากกรมธรรม์ประกันภัยขนส่งสินค้า ครอบคลุมทั้งการขนส่งและการจัดเก็บในคลังสินค้า</div>
+          <div class="cert-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>คุ้มครองครบวงจร</div>
+        </div>
+      </div>
+      <div class="cert-card reveal d2">
+        <div class="cert-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div>
+          <div class="cert-title">GPS Tracking มาตรฐาน</div>
+          <div class="cert-desc">กองรถทุกคันติดตั้งระบบ GPS ที่ได้มาตรฐาน บันทึกเส้นทาง ความเร็ว และอุณหภูมิ Real-time พร้อมรายงานสรุปให้ลูกค้าทุกการส่งมอบ</div>
+          <div class="cert-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>ติดตั้งครบทุกคัน</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BULLROCK GROUP -->
+<section class="group">
+  <div class="container">
+    <div class="group-inner">
+      <div class="section-header center">
+        <div class="tag tag-white reveal">กลุ่มบริษัท</div>
+        <h2 class="section-title light reveal d1" style="margin-top:12px;">BULLROCK GROUP<br>ครบวงจร ครอบคลุม</h2>
+        <p class="section-sub light reveal d2" style="max-width:540px;margin:0 auto;">กลุ่มบริษัทที่เติบโตอย่างแข็งแกร่ง พร้อมให้บริการครบทุกมิติของโลจิสติกส์สมัยใหม่</p>
+      </div>
+      <div class="group-cards">
+        <div class="group-card reveal">
+          <div class="group-card-badge badge-express">หลัก</div>
+          <div class="group-card-ico ico-express">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="group-card-title">BULLROCK EXPRESS</div>
+          <div class="group-card-desc">ผู้ให้บริการขนส่งและคลังสินค้าครบวงจร Cold Chain และสินค้าแห้ง ด้วยกองรถกว่า 50 คัน และทีมงานมืออาชีพพร้อมบริการ 24/7</div>
+        </div>
+        <div class="group-card reveal d1">
+          <div class="group-card-badge badge-holding">การลงทุน</div>
+          <div class="group-card-ico ico-holding">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="group-card-title">BULLROCK HOLDING</div>
+          <div class="group-card-desc">บริษัทโฮลดิ้งที่ดูแลการลงทุนและพัฒนาธุรกิจในกลุ่ม BULLROCK GROUP เพื่อการเติบโตอย่างยั่งยืนในระยะยาว</div>
+        </div>
+        <div class="group-card reveal d2">
+          <div class="group-card-badge badge-onego">นวัตกรรม</div>
+          <div class="group-card-ico ico-onego">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="group-card-title">ONE GO</div>
+          <div class="group-card-desc">แพลตฟอร์มโลจิสติกส์รุ่นใหม่ที่เชื่อมต่อผู้ส่งสินค้าและผู้ให้บริการขนส่ง ด้วยเทคโนโลยีดิจิทัลและ AI เพื่ออนาคตของอุตสาหกรรม</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-text reveal">
+        <h2>พร้อมเป็นพันธมิตร<br>ของธุรกิจคุณ</h2>
+        <p>ปรึกษาฟรี ประเมินราคาฟรี ทีมงานพร้อมตอบทุกคำถามภายใน 24 ชั่วโมง</p>
+      </div>
+      <div class="cta-actions reveal d1">
+        <div class="cta-tel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:0945698288">094-569-8288</a>
+        </div>
+        <a href="contact.html" class="btn-gold">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          ขอใบเสนอราคาฟรี
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-logo">
+        <img src="assets/logo-bullrock.png" alt="BULLROCK EXPRESS">
+        <p class="footer-tagline">ผู้ให้บริการโลจิสติกส์แบบครบวงจร คลังสินค้าและขนส่งสินค้าทั่วประเทศไทย พันธมิตรที่คุณวางใจได้</p>
+      </div>
+      <div>
+        <div class="footer-col-hd">เมนูหลัก</div>
+        <ul class="footer-ul">
+          <li><a href="index.html">หน้าแรก</a></li>
+          <li><a href="services.html">บริการของเรา</a></li>
+          <li><a href="about.html">เกี่ยวกับเรา</a></li>
+          <li><a href="index.html#onego">One Go</a></li>
+          <li><a href="contact.html">ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-hd">บริการ</div>
+        <ul class="footer-ul">
+          <li><a href="services.html">คลังสินค้า Cold Chain</a></li>
+          <li><a href="services.html">คลังสินค้าแห้ง</a></li>
+          <li><a href="services.html">ขนส่ง B2B</a></li>
+          <li><a href="services.html">เช่ารถขนส่ง</a></li>
+          <li><a href="services.html">ระบบ TMS &amp; GPS</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-hd">ติดต่อ</div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><a href="tel:0945698288">094-569-8288</a> / <a href="tel:021233628">021-233-628</a></span></div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:info@bullrock.co.th">info@bullrock.co.th</a></div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>123/7 ถ.เลียบคลองเปรมประชา<br>ต.สวนพริกไทย จ.ปทุมธานี 12000</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 BULLROCK GROUP. สงวนลิขสิทธิ์</div>
+      <div class="footer-copy">BULLROCK EXPRESS · BULLROCK HOLDING · ONE GO</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ====================== NAVBAR ====================== */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.style.boxShadow = window.scrollY > 20
+    ? '0 4px 32px rgba(10,18,52,0.45)'
+    : '0 4px 24px rgba(10,18,52,0.35)';
+}, { passive: true });
+
+/* ====================== SCROLL REVEAL ====================== */
+try {
+  const io = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.10, rootMargin: '0px 0px -32px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} catch(err) {}
+
+// Fallback
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 1200);
+
+/* ====================== 3D MOUSE TILT (cards) ====================== */
+document.querySelectorAll('.mv-card, .val-card, .group-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform 0.08s ease, box-shadow 0.3s ease, border-color 0.3s';
+  });
+  card.addEventListener('mousemove', e => {
+    const r  = card.getBoundingClientRect();
+    const rx = ((e.clientY - r.top  - r.height / 2) / (r.height / 2)) * -4;
+    const ry = ((e.clientX - r.left - r.width  / 2) / (r.width  / 2)) *  4;
+    card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s, border-color 0.3s';
+    card.style.transform  = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+  });
+});
+
+/* ====================== COUNTER ANIMATION ====================== */
+function animateCounter(el, target, suffix) {
+  const duration = 1800;
+  const start = performance.now();
+  const isFloat = target % 1 !== 0;
+  const update = (time) => {
+    const progress = Math.min((time - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = isFloat ? (eased * target).toFixed(1) : Math.floor(eased * target);
+    el.textContent = val + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const raw = el.dataset.count;
+    if (!raw) return;
+    const suffix = el.dataset.suffix || '';
+    animateCounter(el, parseFloat(raw), suffix);
+    counterObs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+</script>
+</body>
+</html>
