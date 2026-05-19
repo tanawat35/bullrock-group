@@ -248,8 +248,8 @@
       position: relative; border-radius: var(--radius-xl); overflow: hidden;
     }
     .story-img-wrap img {
-      width: 100%; height: 420px; object-fit: cover; display: block;
-      border-radius: var(--radius-xl);
+      width: 100%; height: 420px; object-fit: contain; display: block;
+      border-radius: var(--radius-xl); padding: 40px;
     }
     .story-img-badge {
       position: absolute; bottom: 28px; left: 28px;
@@ -465,7 +465,7 @@
       .page-hero-inner { grid-template-columns: 1fr; }
       .page-hero-stats { flex-direction: row; }
       .story-grid { grid-template-columns: 1fr; gap: 48px; }
-      .story-img-wrap img { height: 300px; }
+      .story-img-wrap img { height: 280px; padding: 28px; }
       .numbers-grid { grid-template-columns: repeat(2,1fr); }
       .num-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
       .mv-grid { grid-template-columns: 1fr; }
@@ -571,8 +571,7 @@
   <div class="container">
     <div class="story-grid">
       <div class="story-img-wrap reveal">
-        <div class="story-img-accent"></div>
-        <img src="assets/hero-bg.jpg" alt="BULLROCK EXPRESS — ประวัติบริษัท" loading="lazy">
+        <img src="assets/logo-bullrock.png" alt="BULLROCK EXPRESS — ประวัติบริษัท" loading="lazy">
         <div class="story-img-badge">
           ก่อตั้ง 2562
           <span>BULLROCK GROUP</span>
