@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ติดต่อเรา — BULLROCK EXPRESS | โลจิสติกส์ครบวงจร</title>
+  <meta name="description" content="ติดต่อ BULLROCK EXPRESS ได้ทันที ปรึกษาฟรี ขอใบเสนอราคา หรือฝากข้อความ ทีมงานพร้อมตอบภายใน 24 ชั่วโมง">
+  <meta property="og:title" content="ติดต่อเรา — BULLROCK EXPRESS">
+  <meta property="og:description" content="ปรึกษาฟรี ขอใบเสนอราคา หรือฝากข้อความถึงทีม BULLROCK EXPRESS — โลจิสติกส์ครบวงจร">
+  <meta property="og:url" content="http://www.bullrock-group.com/contact.html">
+  <meta property="og:image" content="http://www.bullrock-group.com/assets/hero-bg.jpg">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="http://www.bullrock-group.com/contact.html">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192x192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ====================== CSS VARIABLES ====================== */
+    :root {
+      --navy:        #3B2560;
+      --navy-dark:   #160B24;
+      --navy-mid:    #1F1029;
+      --navy-light:  #4A2F73;
+      --gold:        #D4AF37;
+      --gold-dark:   #A6841F;
+      --gold-light:  #E8C766;
+      --green:       #16A34A;
+      --green-light: #22C55E;
+      --green-bg:    #F0FDF4;
+      --red:         #EF4444;
+      --red-bg:      #FEF2F2;
+      --text:        #241335;
+      --text-mid:    #5A4E68;
+      --text-muted:  #948BA0;
+      --off-white:   #F8F9FC;
+      --border:      #E8E3ED;
+      --shadow-sm:   0 2px 8px rgba(22,11,36,0.07);
+      --shadow-md:   0 8px 24px rgba(22,11,36,0.11);
+      --shadow-lg:   0 16px 48px rgba(22,11,36,0.16);
+      --shadow-xl:   0 32px 80px rgba(22,11,36,0.22);
+      --shadow-gold: 0 8px 32px rgba(212,175,55,0.32);
+      --font-head:   'Prompt', sans-serif;
+      --font-body:   'Sarabun', sans-serif;
+      --radius-sm:   8px;
+      --radius-md:   16px;
+      --radius-lg:   24px;
+      --radius-xl:   32px;
+      --radius-pill: 9999px;
+      --ease:        cubic-bezier(0.25,0.46,0.45,0.94);
+      --ease-bounce: cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* ====================== RESET ====================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--font-body); color: var(--text); background: white; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+    img { max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ====================== UTILITIES ====================== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-header { margin-bottom: 60px; }
+    .section-header.center { text-align: center; }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.875rem, 4vw, 2.75rem);
+      font-weight: 800; line-height: 1.18;
+      color: var(--navy-dark); letter-spacing: -0.02em;
+    }
+    .section-title.light { color: white; }
+    .section-sub { font-size: 1.0625rem; color: var(--text-mid); line-height: 1.7; margin-top: 16px; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 13px; border-radius: var(--radius-pill);
+      font-family: var(--font-head); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .tag-navy  { background: rgba(59,37,96,0.08); color: var(--navy); }
+    .tag-gold  { background: rgba(212,175,55,0.12); color: var(--gold-dark); }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-size: 0.9375rem; font-weight: 700;
+      border-radius: var(--radius-pill); box-shadow: var(--shadow-gold);
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(212,175,55,0.40); }
+
+    /* ====================== REVEAL ====================== */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+
+    /* ====================== NAVBAR ====================== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 0; transition: background 0.35s, box-shadow 0.35s;
+    }
+    .navbar.scrolled {
+      background: var(--navy-dark);
+      box-shadow: 0 4px 24px rgba(22,11,36,0.35);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; gap: 32px;
+    }
+    .nav-logo img { height: 38px; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links a {
+      font-family: var(--font-head); font-size: 0.875rem; font-weight: 600;
+      color: rgba(255,255,255,0.75); padding: 8px 14px; border-radius: var(--radius-pill);
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: white; background: rgba(255,255,255,0.1); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-size: 0.825rem; font-weight: 700;
+      border-radius: var(--radius-pill); transition: background 0.25s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta svg { width: 14px; height: 14px; }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      width: 36px; height: 36px; padding: 6px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.08); transition: background 0.2s;
+    }
+    .nav-hamburger span {
+      display: block; height: 2px; border-radius: 2px;
+      background: rgba(255,255,255,0.75); transition: transform 0.3s, opacity 0.3s;
+    }
+    /* Hamburger → X animation */
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ====================== MOBILE MENU DRAWER ====================== */
+    .nav-mobile {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 850;
+      background: rgba(22,11,36,0.97); backdrop-filter: blur(20px) saturate(180%);
+      flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    .nav-mobile.open { opacity: 1; visibility: visible; }
+    @media (max-width: 768px) { .nav-mobile { display: flex; } }
+    .nav-mobile a {
+      font-family: var(--font-head); font-size: 1.6rem; font-weight: 700;
+      color: rgba(255,255,255,0.85); padding: 14px 40px; border-radius: var(--radius-md);
+      transform: translateY(20px); opacity: 0;
+      transition: color 0.2s, background 0.2s, transform 0.35s ease, opacity 0.35s ease;
+    }
+    .nav-mobile.open a { transform: translateY(0); opacity: 1; }
+    .nav-mobile.open a:nth-child(1) { transition-delay: 0.05s; }
+    .nav-mobile.open a:nth-child(2) { transition-delay: 0.10s; }
+    .nav-mobile.open a:nth-child(3) { transition-delay: 0.15s; }
+    .nav-mobile.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-mobile a:hover, .nav-mobile a.active { color: var(--gold); background: rgba(212,175,55,0.08); }
+    .nav-mobile-cta {
+      margin-top: 24px; transform: translateY(20px); opacity: 0;
+      transition: transform 0.35s ease 0.25s, opacity 0.35s ease 0.25s;
+    }
+    .nav-mobile.open .nav-mobile-cta { transform: translateY(0); opacity: 1; }
+    .nav-mobile-cta a {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 40px; background: var(--gold); color: var(--navy-dark);
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+      border-radius: var(--radius-pill); box-shadow: var(--shadow-gold);
+    }
+    .nav-mobile-cta a:hover { background: var(--gold-light); }
+
+    /* ====================== PAGE HERO ====================== */
+    .page-hero {
+      background:
+        linear-gradient(180deg, rgba(22,11,36,0.90) 0%, rgba(22,11,36,0.94) 60%, rgba(22,11,36,0.98) 100%),
+        url('assets/real-staff-portrait-2.jpg') center 25% / cover no-repeat;
+      background-attachment: fixed;
+      padding: 130px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 100% 50%, rgba(59,37,96,0.7) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 0% 80%, rgba(212,175,55,0.08) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .page-hero-dots {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .page-hero-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 40px;
+    }
+    .page-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800; line-height: 1.15;
+      color: white; letter-spacing: -0.02em; margin-bottom: 18px;
+    }
+    .page-hero h1 em { color: var(--gold); font-style: normal; }
+    .page-hero-sub { font-size: 1.0625rem; color: rgba(255,255,255,0.6); line-height: 1.75; max-width: 540px; }
+    .page-hero-quick { display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; }
+    .pq-item {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-md); padding: 14px 20px; min-width: 220px;
+    }
+    .pq-icon {
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      background: rgba(212,175,55,0.12); color: var(--gold);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .pq-icon svg { width: 17px; height: 17px; }
+    .pq-label { font-size: 0.73rem; color: rgba(255,255,255,0.4); font-family: var(--font-head); }
+    .pq-val { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: white; margin-top: 1px; }
+    .pq-val a { color: white; transition: color 0.2s; }
+    .pq-val a:hover { color: var(--gold); }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 24px;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb svg { width: 12px; height: 12px; }
+
+    /* ====================== CONTACT MAIN ====================== */
+    .contact-main { background: var(--off-white); padding: 100px 0; }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 56px; align-items: start;
+    }
+
+    /* ---- Info Panel ---- */
+    .info-panel {}
+    .info-panel .tag { margin-bottom: 20px; }
+    .info-title {
+      font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800; color: var(--navy-dark); line-height: 1.25; margin-bottom: 16px;
+    }
+    .info-sub { font-size: 1rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 40px; }
+
+    .info-cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+    .info-card {
+      background: white; border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px 24px;
+      display: flex; align-items: flex-start; gap: 16px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .info-card:hover { border-color: rgba(59,37,96,0.25); box-shadow: var(--shadow-sm); }
+    .info-card-ico {
+      width: 44px; height: 44px; border-radius: var(--radius-sm); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ico-phone { background: rgba(212,175,55,0.10); color: var(--gold-dark); }
+    .ico-email { background: rgba(59,37,96,0.08); color: var(--navy); }
+    .ico-loc   { background: rgba(22,163,74,0.08); color: var(--green); }
+    .ico-hours { background: rgba(212,175,55,0.10); color: var(--gold-dark); }
+    .info-card-ico svg { width: 21px; height: 21px; }
+    .info-card-hd {
+      font-family: var(--font-head); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .info-card-val {
+      font-family: var(--font-head); font-size: 0.925rem; font-weight: 600; color: var(--navy-dark); line-height: 1.5;
+    }
+    .info-card-val a { color: var(--navy); transition: color 0.2s; }
+    .info-card-val a:hover { color: var(--gold-dark); }
+    .info-card-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+
+    .line-cta {
+      display: flex; align-items: center; gap: 14px;
+      background: #06C755; border-radius: var(--radius-lg); padding: 18px 22px;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(6,199,85,0.25);
+    }
+    .line-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(6,199,85,0.35); }
+    .line-ico {
+      width: 42px; height: 42px; background: rgba(255,255,255,0.18);
+      border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .line-ico svg { width: 24px; height: 24px; }
+    .line-text-label { font-size: 0.72rem; color: rgba(255,255,255,0.75); font-family: var(--font-head); font-weight: 600; }
+    .line-text-val { font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: white; margin-top: 2px; }
+    .line-arrow { margin-left: auto; color: rgba(255,255,255,0.65); }
+    .line-arrow svg { width: 18px; height: 18px; }
+
+    /* ---- Form Panel ---- */
+    .form-panel {
+      background: white; border-radius: var(--radius-xl);
+      border: 1.5px solid var(--border); padding: 48px 44px;
+      box-shadow: var(--shadow-md);
+    }
+    .form-hd { font-family: var(--font-head); font-size: 1.25rem; font-weight: 800; color: var(--navy-dark); margin-bottom: 6px; }
+    .form-sub { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 32px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-family: var(--font-head); font-size: 0.8rem; font-weight: 700;
+      color: var(--navy-dark); letter-spacing: 0.02em;
+    }
+    .form-label span { color: var(--red); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 12px 16px;
+      background: var(--off-white); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-family: var(--font-body); font-size: 0.9375rem;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--navy-light); background: white;
+      box-shadow: 0 0 0 3px rgba(59,37,96,0.08);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer; }
+    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+
+    .service-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-pill); font-family: var(--font-head);
+      font-size: 0.8rem; font-weight: 600; color: var(--text-mid);
+      background: white; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--navy-light); color: var(--navy); }
+    .chip.selected { border-color: var(--navy); color: var(--navy-dark); background: rgba(59,37,96,0.06); }
+    .chip svg { width: 14px; height: 14px; }
+
+    .form-submit {
+      width: 100%; padding: 15px 28px;
+      background: var(--navy-dark); color: white;
+      font-family: var(--font-head); font-size: 1rem; font-weight: 700;
+      border-radius: var(--radius-pill);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(22,11,36,0.20);
+      cursor: pointer; border: none; margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--navy-light); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(22,11,36,0.28); }
+    .form-submit svg { width: 18px; height: 18px; }
+    .form-note { font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 14px; line-height: 1.6; }
+
+    /* Success state */
+    .form-success {
+      display: none; text-align: center; padding: 48px 24px;
+    }
+    .form-success.show { display: block; }
+    .success-ico {
+      width: 72px; height: 72px; background: var(--green-bg);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; color: var(--green);
+    }
+    .success-ico svg { width: 36px; height: 36px; }
+    .success-title { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; color: var(--navy-dark); margin-bottom: 10px; }
+    .success-sub { font-size: 0.975rem; color: var(--text-mid); line-height: 1.7; }
+
+    /* ====================== MAP SECTION ====================== */
+    .map-section { background: white; padding: 80px 0 0; }
+    .map-header { text-align: center; margin-bottom: 40px; }
+    .map-wrap {
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0; overflow: hidden;
+      box-shadow: var(--shadow-lg); position: relative;
+    }
+    .map-wrap iframe {
+      width: 100%; height: 420px; border: none; display: block;
+    }
+    .map-overlay {
+      position: absolute; top: 24px; left: 24px;
+      background: var(--navy-dark); color: white;
+      border-radius: var(--radius-md); padding: 16px 20px;
+      box-shadow: var(--shadow-lg);
+    }
+    .map-overlay-title { font-family: var(--font-head); font-size: 0.875rem; font-weight: 700; }
+    .map-overlay-addr { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 4px; line-height: 1.5; }
+
+    /* ====================== FAQ ====================== */
+    .faq { background: var(--off-white); padding: 100px 0; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .faq-item {
+      background: white; border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover { border-color: rgba(59,37,96,0.2); }
+    .faq-q {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 24px; gap: 16px; cursor: pointer;
+      font-family: var(--font-head); font-size: 0.9375rem; font-weight: 700;
+      color: var(--navy-dark); text-align: left; background: none; border: none;
+    }
+    .faq-q svg {
+      width: 20px; height: 20px; color: var(--navy-light); flex-shrink: 0;
+      transition: transform 0.3s var(--ease);
+    }
+    .faq-item.open .faq-q svg { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s var(--ease), padding 0.3s;
+      font-size: 0.9rem; color: var(--text-mid); line-height: 1.8;
+    }
+    .faq-a-inner { padding: 0 24px 22px; }
+
+    /* ====================== FOOTER ====================== */
+    footer { background: var(--navy-dark); padding: 64px 0 32px; position: relative; }
+    footer::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(212,175,55,0.35),transparent); }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1.2fr; gap:48px; margin-bottom:48px; }
+    .footer-logo img { height:38px; margin-bottom:14px; }
+    .footer-tagline { font-size:0.875rem; color:rgba(255,255,255,0.45); line-height:1.8; max-width:240px; }
+    .footer-col-hd { font-family:var(--font-head); font-size:0.75rem; font-weight:700; color:var(--gold); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:16px; }
+    .footer-ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-ul a { font-size:0.875rem; color:rgba(255,255,255,0.45); transition:color 0.2s, padding-left 0.2s; }
+    .footer-ul a:hover { color:rgba(255,255,255,0.85); padding-left:5px; }
+    .fci { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; }
+    .fci svg { width:15px; height:15px; color:var(--gold); flex-shrink:0; margin-top:3px; }
+    .fci span, .fci a { font-size:0.875rem; color:rgba(255,255,255,0.45); line-height:1.55; transition:color 0.2s; }
+    .fci a:hover { color:var(--gold); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,0.07); padding-top:24px; display:flex; align-items:center; justify-content:space-between; }
+    .footer-copy { font-size:0.8rem; color:rgba(255,255,255,0.3); }
+
+    /* ====================== RESPONSIVE ====================== */
+    @media (max-width: 1024px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-panel { padding: 36px 28px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 900px) {
+      .page-hero { background-attachment: scroll; }
+      .page-hero-inner { grid-template-columns: 1fr; }
+      .page-hero-quick { flex-direction: row; flex-wrap: wrap; }
+      .pq-item { flex: 1; min-width: 180px; }
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-hero-quick { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo-2026.png" alt="BULLROCK EXPRESS Logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="services.html">บริการ</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="contact.html" class="active">ติดต่อ</a></li>
+      </ul>
+      <a href="contact.html" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        ขอใบเสนอราคา
+      </a>
+      <button class="nav-hamburger" id="hamburger" aria-label="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="nav-mobile" id="navMobile" role="dialog" aria-label="เมนูหลัก">
+  <a href="index.html">หน้าแรก</a>
+  <a href="services.html">บริการ</a>
+  <a href="about.html">เกี่ยวกับเรา</a>
+  <a href="contact.html" class="active">ติดต่อ</a>
+  <div class="nav-mobile-cta">
+    <a href="contact.html">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      ขอใบเสนอราคา
+    </a>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-dots"></div>
+  <div class="container">
+    <div class="breadcrumb reveal">
+      <a href="index.html">หน้าแรก</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      <span>ติดต่อเรา</span>
+    </div>
+    <div class="page-hero-inner">
+      <div>
+        <div class="reveal" style="margin-bottom:16px;">
+          <span class="tag tag-gold">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            ตอบทุกคำถามภายใน 24 ชม.
+          </span>
+        </div>
+        <h1 class="reveal d1">พูดคุยกับ<br><em>ทีมผู้เชี่ยวชาญ</em></h1>
+        <p class="page-hero-sub reveal d2">
+          ไม่ว่าจะเป็นการขอใบเสนอราคา ปรึกษาเรื่องระบบขนส่ง หรือสอบถามข้อมูล ทีมงานของเราพร้อมให้คำแนะนำและช่วยออกแบบโซลูชันที่เหมาะกับธุรกิจของคุณ
+        </p>
+      </div>
+      <div class="page-hero-quick reveal d3">
+        <div class="pq-item">
+          <div class="pq-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="pq-label">โทรหาเราได้เลย</div>
+            <div class="pq-val"><a href="tel:0835962828">083-596-2828</a></div>
+          </div>
+        </div>
+        <div class="pq-item">
+          <div class="pq-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="pq-label">อีเมล</div>
+            <div class="pq-val"><a href="mailto:info@bullrock.co.th">info@bullrock.co.th</a></div>
+          </div>
+        </div>
+        <div class="pq-item">
+          <div class="pq-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="pq-label">เวลาทำการ</div>
+            <div class="pq-val">จ–ศ 08:00–18:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT MAIN -->
+<section class="contact-main" id="contact-form">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- Info Panel -->
+      <div class="info-panel">
+        <div class="tag tag-navy reveal">ข้อมูลติดต่อ</div>
+        <h2 class="info-title reveal d1" style="margin-top:16px;">หลายช่องทาง<br>เลือกได้ตามสะดวก</h2>
+        <p class="info-sub reveal d2">ทีมงาน BULLROCK EXPRESS พร้อมให้บริการตลอดเวลา ไม่ว่าจะโทรหา ส่งอีเมล หรือ LINE เราตอบทุกช่องทาง</p>
+
+        <div class="info-cards">
+          <div class="info-card reveal">
+            <div class="info-card-ico ico-phone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="info-card-hd">โทรศัพท์</div>
+              <div class="info-card-val">
+                <a href="tel:0835962828">083-596-2828</a> &nbsp;/&nbsp;
+                <a href="tel:021233628">02-123-3628</a>
+              </div>
+              <div class="info-card-sub">จันทร์–ศุกร์ 08:00–18:00 น.</div>
+            </div>
+          </div>
+
+          <div class="info-card reveal d1">
+            <div class="info-card-ico ico-email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="info-card-hd">อีเมล</div>
+              <div class="info-card-val"><a href="mailto:info@bullrock.co.th">info@bullrock.co.th</a></div>
+              <div class="info-card-sub">ตอบกลับภายใน 24 ชั่วโมง</div>
+            </div>
+          </div>
+
+          <div class="info-card reveal d2">
+            <div class="info-card-ico ico-loc">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="info-card-hd">ที่อยู่สำนักงาน</div>
+              <div class="info-card-val">123/7 ถ.เลียบคลองเปรมประชา</div>
+              <div class="info-card-sub">ต.สวนพริกไทย อ.เมือง จ.ปทุมธานี 12000</div>
+            </div>
+          </div>
+
+          <div class="info-card reveal d3">
+            <div class="info-card-ico ico-hours">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div class="info-card-hd">เวลาทำการ</div>
+              <div class="info-card-val">จันทร์–ศุกร์ 08:00–18:00 น.</div>
+              <div class="info-card-sub">Hotline โลจิสติกส์: 24/7</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Form Panel -->
+      <div class="form-panel reveal">
+        <div id="formBody">
+          <div class="form-hd">ส่งข้อความถึงเรา</div>
+          <div class="form-sub">กรอกข้อมูลด้านล่าง ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง</div>
+
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="fname">ชื่อ <span>*</span></label>
+                <input class="form-input" id="fname" name="fname" type="text" placeholder="ชื่อจริง" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lname">นามสกุล</label>
+                <input class="form-input" id="lname" name="lname" type="text" placeholder="นามสกุล">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="company">บริษัท / องค์กร <span>*</span></label>
+                <input class="form-input" id="company" name="company" type="text" placeholder="ชื่อบริษัทของคุณ" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone">เบอร์โทรศัพท์ <span>*</span></label>
+                <input class="form-input" id="phone" name="phone" type="tel" placeholder="0xx-xxx-xxxx" required>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px;">
+              <label class="form-label" for="email">อีเมล <span>*</span></label>
+              <input class="form-input" id="email" name="email" type="email" placeholder="email@company.com" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px;">
+              <label class="form-label" for="service">บริการที่สนใจ</label>
+              <select class="form-select" id="service" name="service">
+                <option value="">เลือกบริการ...</option>
+                <option>คลังสินค้า Cold Chain</option>
+                <option>คลังสินค้าแห้ง / General</option>
+                <option>ขนส่ง B2B ทั่วประเทศ</option>
+                <option>เช่ารถขนส่ง</option>
+                <option>ระบบ TMS / GPS Tracking</option>
+                <option>บริการครบวงจร (Outsource)</option>
+                <option>อื่นๆ</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px;">
+              <label class="form-label">ปริมาณสินค้าโดยประมาณ</label>
+              <div class="service-chips">
+                <button type="button" class="chip" data-chip="volume">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  &lt; 10 ตัน/เดือน
+                </button>
+                <button type="button" class="chip" data-chip="volume">10–50 ตัน/เดือน</button>
+                <button type="button" class="chip" data-chip="volume">50–200 ตัน/เดือน</button>
+                <button type="button" class="chip" data-chip="volume">&gt; 200 ตัน/เดือน</button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:24px;">
+              <label class="form-label" for="message">ข้อความ / รายละเอียดเพิ่มเติม</label>
+              <textarea class="form-textarea" id="message" name="message" placeholder="อธิบายความต้องการของคุณ เช่น ประเภทสินค้า เส้นทาง ระยะเวลา หรือคำถามอื่นๆ..."></textarea>
+            </div>
+
+            <button type="submit" class="form-submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              ส่งข้อความ
+            </button>
+            <p class="form-note">ข้อมูลของคุณจะถูกเก็บเป็นความลับ ไม่มีการส่งต่อให้บุคคลที่สาม</p>
+          </form>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="success-title">ส่งข้อความสำเร็จ!</div>
+          <div class="success-sub">ขอบคุณที่ติดต่อ BULLROCK EXPRESS<br>ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง<br><br>หากต้องการด่วน โทร <a href="tel:0835962828" style="color:var(--navy);font-weight:700;">083-596-2828</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-header center">
+      <div class="tag tag-navy reveal">คำถามที่พบบ่อย</div>
+      <h2 class="section-title reveal d1" style="margin-top:12px;">มีคำถาม? เราตอบได้</h2>
+      <p class="section-sub reveal d2">หากไม่พบคำตอบ ติดต่อทีมงานได้เลยครับ</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          ขอใบเสนอราคาได้เร็วแค่ไหน?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">หลังจากกรอกแบบฟอร์มหรือโทรเข้ามา ทีมเซลล์จะติดต่อกลับและส่งใบเสนอราคาเบื้องต้นภายใน 2–4 ชั่วโมงในวันทำการ สำหรับงานที่ซับซ้อน (Cold Chain, Outsource) อาจใช้เวลาสูงสุด 24 ชั่วโมง</div></div>
+      </div>
+      <div class="faq-item reveal d1">
+        <button class="faq-q">
+          รับขนส่งสินค้าอาหารและยาได้ไหม?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">ได้เลยครับ BULLROCK EXPRESS มีระบบ Cold Chain ที่ได้มาตรฐาน GMP และ FSSC 22000 รองรับสินค้าอาหาร ยา เครื่องสำอาง และผลิตภัณฑ์ที่ต้องการควบคุมอุณหภูมิตลอดการขนส่ง</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          มีบริการ Outsource โลจิสติกส์ครบวงจรไหม?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">มีครับ เราให้บริการ 3PL (Third-Party Logistics) แบบครบวงจร ตั้งแต่รับสินค้าจากผู้ผลิต จัดเก็บในคลัง หยิบสินค้า (Picking & Packing) ไปจนถึงส่งมอบถึงปลายทาง พร้อมระบบรายงาน Real-time ผ่าน TMS</div></div>
+      </div>
+      <div class="faq-item reveal d1">
+        <button class="faq-q">
+          สามารถติดตามสถานะสินค้าได้ไหม?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">ได้ครับ รถทุกคันติดตั้งระบบ GPS มาตรฐาน ลูกค้าสามารถติดตามตำแหน่งรถและสถานะสินค้าได้แบบ Real-time ผ่าน Dashboard ออนไลน์หรือรับรายงานสรุปทุกการส่งมอบ</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          พื้นที่ให้บริการขนส่งครอบคลุมที่ไหนบ้าง?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">เราให้บริการขนส่งทั่วประเทศไทย โดยเน้นหลักในกรุงเทพฯ ปริมณฑล และภาคกลาง สำหรับต่างจังหวัดมีเครือข่ายพันธมิตรครอบคลุมทุกจังหวัด กรุณาแจ้งเส้นทางเพื่อให้ทีมงานประเมินรายละเอียด</div></div>
+      </div>
+      <div class="faq-item reveal d1">
+        <button class="faq-q">
+          มีประกันภัยสินค้าระหว่างขนส่งไหม?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">มีครับ สินค้าทุกชิ้นที่อยู่ในความดูแลของเรามีกรมธรรม์ประกันภัยขนส่งคุ้มครองตลอดการขนส่งและการจัดเก็บ หากต้องการวงเงินคุ้มครองพิเศษ สามารถแจ้งได้ในขั้นตอนจัดทำใบเสนอราคา</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-logo">
+        <img src="assets/logo-2026.png" alt="BULLROCK EXPRESS">
+        <p class="footer-tagline">ผู้ให้บริการโลจิสติกส์แบบครบวงจร คลังสินค้าและขนส่งสินค้าทั่วประเทศไทย พันธมิตรที่คุณวางใจได้</p>
+      </div>
+      <div>
+        <div class="footer-col-hd">เมนูหลัก</div>
+        <ul class="footer-ul">
+          <li><a href="index.html">หน้าแรก</a></li>
+          <li><a href="services.html">บริการของเรา</a></li>
+          <li><a href="about.html">เกี่ยวกับเรา</a></li>
+          <li><a href="index.html#onego">One Go</a></li>
+          <li><a href="contact.html">ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-hd">บริการ</div>
+        <ul class="footer-ul">
+          <li><a href="services.html">คลังสินค้า Cold Chain</a></li>
+          <li><a href="services.html">คลังสินค้าแห้ง</a></li>
+          <li><a href="services.html">ขนส่ง B2B</a></li>
+          <li><a href="services.html">เช่ารถขนส่ง</a></li>
+          <li><a href="services.html">ระบบ TMS &amp; GPS</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-hd">ติดต่อ</div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><a href="tel:0835962828">083-596-2828</a> / <a href="tel:021233628">02-123-3628</a></span></div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:info@bullrock.co.th">info@bullrock.co.th</a></div>
+        <div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>123/7 ถ.เลียบคลองเปรมประชา<br>ต.สวนพริกไทย จ.ปทุมธานี 12000</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 BULLROCK GROUP. สงวนลิขสิทธิ์</div>
+      <div class="footer-copy">BULLROCK EXPRESS · BULLROCK HOLDING · ONE GO</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ====================== NAVBAR ====================== */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.style.boxShadow = window.scrollY > 20
+    ? '0 4px 32px rgba(22,11,36,0.45)'
+    : '0 4px 24px rgba(22,11,36,0.35)';
+}, { passive: true });
+
+/* ====================== SCROLL REVEAL ====================== */
+try {
+  const io = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.10, rootMargin: '0px 0px -32px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} catch(err) {}
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+}, 1200);
+
+/* ====================== FAQ ACCORDION ====================== */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const ans  = item.querySelector('.faq-a');
+    const isOpen = item.classList.contains('open');
+
+    // close all
+    document.querySelectorAll('.faq-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-a').style.maxHeight = '0';
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      ans.style.maxHeight = ans.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ====================== SERVICE CHIPS (single-select per group) ====================== */
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const group = chip.closest('.service-chips');
+    group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+  });
+});
+
+/* ====================== FORM SUBMIT ====================== */
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const fname   = document.getElementById('fname').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const phone   = document.getElementById('phone').value.trim();
+  const email   = document.getElementById('email').value.trim();
+
+  // Basic validation
+  if (!fname || !company || !phone || !email) {
+    const inputs = [
+      document.getElementById('fname'),
+      document.getElementById('company'),
+      document.getElementById('phone'),
+      document.getElementById('email'),
+    ];
+    inputs.forEach(inp => {
+      if (!inp.value.trim()) {
+        inp.style.borderColor = 'var(--red)';
+        inp.addEventListener('input', () => { inp.style.borderColor = ''; }, { once: true });
+      }
+    });
+    return;
+  }
+
+  // Show loading state
+  const btn = this.querySelector('.form-submit');
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> กำลังส่ง...';
+  btn.disabled = true;
+
+  // Simulate submit (replace with real API call if needed)
+  setTimeout(() => {
+    document.getElementById('formBody').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  }, 1200);
+});
+
+/* ====================== 3D TILT (info cards) ====================== */
+document.querySelectorAll('.info-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform 0.08s ease, box-shadow 0.25s, border-color 0.25s';
+  });
+  card.addEventListener('mousemove', e => {
+    const r  = card.getBoundingClientRect();
+    const rx = ((e.clientY - r.top  - r.height / 2) / (r.height / 2)) * -3;
+    const ry = ((e.clientX - r.left - r.width  / 2) / (r.width  / 2)) *  3;
+    card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, border-color 0.25s';
+    card.style.transform  = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+  });
+});
+
+/* ====================== SPIN KEYFRAME ====================== */
+const style = document.createElement('style');
+style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(style);
+
+/* ====================== HAMBURGER MENU ====================== */
+const hamburger = document.getElementById('hamburger');
+const navMobile = document.getElementById('navMobile');
+function toggleMenu(force) {
+  const isOpen = (force !== undefined) ? force : !navMobile.classList.contains('open');
+  navMobile.classList.toggle('open', isOpen);
+  hamburger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+hamburger?.addEventListener('click', () => toggleMenu());
+navMobile?.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => toggleMenu(false));
+});
+navMobile?.addEventListener('click', (e) => { if (e.target === navMobile) toggleMenu(false); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && navMobile?.classList.contains('open')) toggleMenu(false);
+});
+</script>
+</body>
+</html>
