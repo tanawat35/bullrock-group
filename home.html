@@ -259,13 +259,16 @@
       position: absolute; inset: 0; width: 100%; height: 100%;
       z-index: 0; pointer-events: none;
     }
+    .hero-scene3d {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
     .hero-parallax-bg {
       position: absolute; inset: -25%;
       opacity: 0.6;
       background:
         radial-gradient(ellipse 90% 70% at 15% 25%, rgba(74,47,115,0.60) 0%, transparent 55%),
         radial-gradient(ellipse 70% 60% at 90% 80%, rgba(14,7,20,0.85) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 60% 10%, rgba(212,175,55,0.06) 0%, transparent 50%),
         linear-gradient(150deg, #0d0714 0%, #1a0f2a 40%, #241335 70%, #0c0712 100%);
       will-change: transform; z-index: 0;
     }
@@ -282,21 +285,10 @@
     .hero-overlay {
       position: absolute; inset: 0; z-index: 1;
       background:
-        radial-gradient(ellipse 60% 55% at 75% 45%, rgba(212,175,55,0.10) 0%, transparent 55%),
         radial-gradient(ellipse 50% 50% at 10% 85%, rgba(74,47,115,0.18) 0%, transparent 50%),
         linear-gradient(180deg, rgba(7,11,30,0.15) 0%, transparent 40%, rgba(7,11,30,0.35) 100%);
     }
-    /* Diagonal light sweep */
-    .hero-overlay::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(
-        108deg,
-        transparent 30%,
-        rgba(212,175,55,0.04) 50%,
-        transparent 70%
-      );
-    }
+    /* Diagonal light sweep removed */
     .hero-dots {
       position: absolute; inset: 0; z-index: 2;
       background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px);
@@ -354,18 +346,18 @@
     }
     .hero-3d-inner img {
       width: 100%; height: 100%; object-fit: contain;
-      filter: drop-shadow(0 16px 40px rgba(212,175,55,0.35)) drop-shadow(0 0 24px rgba(212,175,55,0.18));
+      filter: drop-shadow(0 16px 40px rgba(90,45,150,0.45)) drop-shadow(0 0 26px rgba(90,45,150,0.28));
     }
     .hero-3d-ring {
       position: absolute; border-radius: 50%; border: 1.5px solid;
       animation: ringPulse 3.5s ease-in-out infinite;
       pointer-events: none;
     }
-    .hero-3d-ring:nth-child(2) { width: 370px; height: 370px; border-color: rgba(212,175,55,0.30); animation-delay: 0s; }
+    .hero-3d-ring:nth-child(2) { width: 370px; height: 370px; border-color: rgba(90,45,150,0.40); animation-delay: 0s; }
     .hero-3d-ring:nth-child(3) { width: 450px; height: 450px; border-color: rgba(59,37,96,0.12); animation-delay: 0.7s; }
     .hero-3d-glow {
-      position: absolute; width: 280px; height: 280px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 68%);
+      position: absolute; width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(90,45,150,0.32) 0%, transparent 68%);
       pointer-events: none; animation: glowPulse 4.5s ease-in-out infinite;
       top: 50%; left: 50%; transform: translate(-50%,-50%);
     }
@@ -693,7 +685,7 @@
 <nav class="navbar" id="navbar">
   <div class="container">
     <div class="nav-inner">
-      <a href="home.html" class="nav-logo">
+      <a href="index.html" class="nav-logo">
         <img src="assets/logo-2026.png" alt="BULLROCK EXPRESS Logo">
       </a>
       <ul class="nav-links">
@@ -733,22 +725,14 @@
   <video class="hero-video" id="heroVideo" muted playsinline loop preload="metadata">
     <source src="assets/hero-higgsfield.mp4" type="video/mp4">
   </video>
-  <canvas class="hero-canvas" id="heroCanvas"></canvas>
   <div class="hero-parallax-bg" id="heroBg"></div>
+  <canvas class="hero-scene3d" id="heroScene3d"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-dots"></div>
-  <div class="hero-orb hero-orb-1" style="left: 900px; top: -150px"></div>
-  <div class="hero-orb hero-orb-2" style="left: 150px; top: 250px"></div>
-  <div class="hero-orb hero-orb-3" style="position: absolute; top: 400px; left: 900px"></div>
   <div class="container">
     <div class="hero-inner">
-      <div class="hero-content">
-        <div class="hero-tag reveal">
-          <span class="tag tag-white">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            Integrated Logistics &amp; Transport Solutions
-          </span>
-        </div>
+      <div class="hero-content" style="position:relative;top:-15px">
+        <div class="hero-tag reveal"></div>
         <h1 class="hero-headline reveal d1">
           พันธมิตร<em>โลจิสติกส์</em><br>ที่คุณวางใจได้
         </h1>
@@ -1122,7 +1106,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-logo">
-        <img src="assets/logo-2026.png" alt="BULLROCK EXPRESS">
+        <a href="home.html"><img src="assets/logo-2026.png" alt="BULLROCK EXPRESS"></a>
         <p class="footer-tagline">ผู้ให้บริการโลจิสติกส์แบบครบวงจร คลังสินค้าและขนส่งสินค้าทั่วประเทศไทย พันธมิตรที่คุณวางใจได้</p>
       </div>
       <div>
@@ -1166,6 +1150,7 @@
   <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ====================== PAGE LOADER ====================== */
 // Script is at end of <body> — DOM is ready, dismiss loader immediately (no timer needed)
@@ -1244,120 +1229,139 @@ function runParallax() {
 }
 runParallax(); // initial call
 
-/* ====================== HERO CANVAS — GOLD LIGHT-TRAIL PARTICLES ====================== */
+/* ====================== HERO 3D CINEMATIC SCENE (SCROLL-DRIVEN) ====================== */
 (function() {
-  const canvas = document.getElementById('heroCanvas');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('heroScene3d');
   const hero   = document.getElementById('home');
-  if (!canvas || !hero) return;
-  const ctx = canvas.getContext('2d');
-  let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
-  let mouseX = -9999, mouseY = -9999, mouseActive = false;
+  if (!canvas || !hero || !window.THREE) return;
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x160B24, 0.014);
+
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 400);
+  camera.position.set(0,0,24);
+
+  const world = new THREE.Group();
+  scene.add(world);
+
+  const GOLD = new THREE.Color(0xD4AF37), GOLDL = new THREE.Color(0xE8C766), PURP = new THREE.Color(0x4A2F73);
+  let w = 0, h = 0;
+  const isMobile = hero.clientWidth < 760;
+
+  function makeDot(){
+    const c=document.createElement('canvas'); c.width=c.height=64;
+    const g=c.getContext('2d'); const gr=g.createRadialGradient(32,32,0,32,32,32);
+    gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(.25,'rgba(255,236,180,.9)');
+    gr.addColorStop(1,'rgba(212,175,55,0)');
+    g.fillStyle=gr; g.fillRect(0,0,64,64);
+    const t=new THREE.Texture(c); t.needsUpdate=true; return t;
+  }
+  const dotTex = makeDot();
+
+  const DUST = isMobile? 700 : 1400;
+  const dpos = new Float32Array(DUST*3), dcol = new Float32Array(DUST*3);
+  for(let i=0;i<DUST;i++){
+    dpos[i*3]  =(Math.random()-.5)*140;
+    dpos[i*3+1]=(Math.random()-.5)*90;
+    dpos[i*3+2]=-Math.random()*180+20;
+    const c = Math.random()<.7? GOLD : PURP;
+    dcol[i*3]=c.r; dcol[i*3+1]=c.g; dcol[i*3+2]=c.b;
+  }
+  const dgeo = new THREE.BufferGeometry();
+  dgeo.setAttribute('position', new THREE.BufferAttribute(dpos,3));
+  dgeo.setAttribute('color', new THREE.BufferAttribute(dcol,3));
+  const dust = new THREE.Points(dgeo, new THREE.PointsMaterial({
+    size:.55, map:dotTex, vertexColors:true, transparent:true, opacity:.85,
+    depthWrite:false, blending:THREE.AdditiveBlending, sizeAttenuation:true }));
+  world.add(dust);
+
+
+  const pulses = [];
+  const routeCount = isMobile? 3 : 5;
+  for(let r=0;r<routeCount;r++){
+    const pts=[];
+    for(let k=0;k<5;k++) pts.push(new THREE.Vector3(
+      (Math.random()-.5)*80, (Math.random()-.5)*40, -k*30 - Math.random()*10));
+    const curve = new THREE.CatmullRomCurve3(pts);
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 80, .09, 6, false),
+      new THREE.MeshBasicMaterial({color:GOLD, transparent:true, opacity:.15, blending:THREE.AdditiveBlending, depthWrite:false}));
+    world.add(tube);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:dotTex, color:GOLDL, transparent:true, opacity:.95, blending:THREE.AdditiveBlending, depthWrite:false}));
+    sp.scale.set(3,3,1); world.add(sp);
+    pulses.push({curve, sp, t:Math.random(), spd:.0016+Math.random()*.0022});
+  }
+
+  /* Camera choreography — plays through as the hero scrolls out of view */
+  const KF = [
+    {pos:[0,0,24],   look:[0,0,0]},
+    {pos:[10,4,10],  look:[0,1,-8]},
+    {pos:[-8,-3,-6], look:[0,0,-22]},
+    {pos:[4,3,-24],  look:[0,1,-40]}
+  ];
+  function lerp3(a,b,t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
+  function sampleKF(p){
+    const seg=(KF.length-1); let f=p*seg; let i=Math.min(Math.floor(f),seg-1); let t=f-i;
+    t = t*t*(3-2*t);
+    return { pos:lerp3(KF[i].pos,KF[i+1].pos,t), look:lerp3(KF[i].look,KF[i+1].look,t) };
+  }
+
+  let scrollP = 0, smoothP = 0;
+  function updateScrollP() {
+    const rect = hero.getBoundingClientRect();
+    const total = rect.height || 1;
+    const scrolled = Math.min(Math.max(-rect.top, 0), total);
+    scrollP = scrolled / total;
+  }
+  window.addEventListener('scroll', updateScrollP, {passive:true});
+  updateScrollP();
+
+  let mx=0,my=0,tmx=0,tmy=0;
+  if(!reduce) hero.addEventListener('mousemove', e=>{
+    const r = hero.getBoundingClientRect();
+    tmx=((e.clientX-r.left)/r.width-.5); tmy=((e.clientY-r.top)/r.height-.5);
+  });
+
+  const lookTarget = new THREE.Vector3();
+  const clock = new THREE.Clock();
 
   function resize() {
     w = hero.clientWidth; h = hero.clientHeight;
-    canvas.width = w * dpr; canvas.height = h * dpr;
-    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    renderer.setSize(w, h);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
   }
   resize();
   window.addEventListener('resize', resize);
 
-  hero.addEventListener('mousemove', e => {
-    const r = hero.getBoundingClientRect();
-    mouseX = e.clientX - r.left; mouseY = e.clientY - r.top;
-    mouseActive = true;
-  });
-  hero.addEventListener('mouseleave', () => { mouseActive = false; mouseX = -9999; mouseY = -9999; });
+  function render(){
+    requestAnimationFrame(render);
+    const dt = clock.getDelta(), et = clock.elapsedTime;
 
-  // Drifting gold streak particles — suggest motion along a route
-  const N = 46;
-  const particles = Array.from({ length: N }, () => spawn(true));
-  function spawn(randomX) {
-    return {
-      x: randomX ? Math.random() * w : -20,
-      y: Math.random() * h,
-      len: 30 + Math.random() * 70,
-      speed: 0.6 + Math.random() * 1.6,
-      wobble: Math.random() * Math.PI * 2,
-      wobbleSpeed: 0.004 + Math.random() * 0.01,
-      wobbleAmp: 6 + Math.random() * 18,
-      opacity: 0.12 + Math.random() * 0.28,
-      size: 1 + Math.random() * 1.6,
-    };
-  }
+    smoothP += (scrollP - smoothP) * 0.08;
+    mx += (tmx-mx)*.05; my += (tmy-my)*.05;
 
-  // A few flowing gold route curves (bezier), gently bending toward the cursor
-  const routes = [
-    { baseY: 0.30, dash: 0, speed: 0.6 },
-    { baseY: 0.55, dash: 40, speed: 0.9 },
-    { baseY: 0.75, dash: 20, speed: 0.75 },
-  ];
+    const s = sampleKF(smoothP);
+    camera.position.set(s.pos[0] + mx*4, s.pos[1] - my*3, s.pos[2]);
+    lookTarget.set(s.look[0] + mx*3, s.look[1] - my*2, s.look[2]);
+    camera.lookAt(lookTarget);
 
-  let t = 0;
-  function drawRoutes() {
-    routes.forEach((r, i) => {
-      const baseY = h * r.baseY;
-      const bendTarget = mouseActive ? (mouseY - baseY) * 0.18 : 0;
-      r.bend = (r.bend || 0) + (bendTarget - (r.bend || 0)) * 0.05;
-      ctx.beginPath();
-      ctx.moveTo(-40, baseY);
-      ctx.bezierCurveTo(
-        w * 0.3, baseY + r.bend,
-        w * 0.7, baseY - r.bend,
-        w + 40, baseY
-      );
-      ctx.lineWidth = 1.4;
-      ctx.strokeStyle = `rgba(212,175,55,${0.16 + i * 0.03})`;
-      ctx.shadowColor = 'rgba(212,175,55,0.5)';
-      ctx.shadowBlur = 8;
-      ctx.setLineDash([10, 14]);
-      ctx.lineDashOffset = -t * r.speed;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-      ctx.setLineDash([]);
+    world.rotation.y = et*0.02 + mx*0.15;
+    world.rotation.x = my*0.08;
+    dust.rotation.y = et*0.01;
+
+    pulses.forEach(p=>{
+      p.t = (p.t + p.spd) % 1;
+      const pt = p.curve.getPointAt(p.t);
+      p.sp.position.copy(pt);
+      p.sp.material.opacity = 0.5 + Math.sin(et*3 + p.t*6)*0.4;
     });
+
+    renderer.render(scene, camera);
   }
-
-  function drawParticles() {
-    particles.forEach(p => {
-      p.wobble += p.wobbleSpeed;
-      p.x += p.speed;
-      let py = p.y + Math.sin(p.wobble) * p.wobbleAmp;
-
-      // gentle attraction/repulsion near cursor
-      if (mouseActive) {
-        const dx = p.x - mouseX, dy = py - mouseY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 140) {
-          const force = (140 - dist) / 140;
-          py += (dy / (dist || 1)) * force * 10;
-        }
-      }
-
-      const grad = ctx.createLinearGradient(p.x - p.len, py, p.x, py);
-      grad.addColorStop(0, 'rgba(212,175,55,0)');
-      grad.addColorStop(1, `rgba(212,175,55,${p.opacity})`);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = p.size;
-      ctx.beginPath();
-      ctx.moveTo(p.x - p.len, py);
-      ctx.lineTo(p.x, py);
-      ctx.stroke();
-
-      if (p.x - p.len > w + 20) {
-        Object.assign(p, spawn(false));
-      }
-    });
-  }
-
-  function loop() {
-    t += 1;
-    ctx.clearRect(0, 0, w, h);
-    drawRoutes();
-    drawParticles();
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
+  render();
 })();
 
 /* ====================== HERO VIDEO — MOUSE SCRUB ====================== */
