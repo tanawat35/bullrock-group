@@ -161,3 +161,12 @@ Seamless loop, 16:9, 1920×1080, 8–10 second duration, 24–30fps.
 
 ## 9. Favicon / SEO
 ไม่เปลี่ยนจากเดิม — ดู `Todo.md` ต้นฉบับหัวข้อ 10 สำหรับ favicon tags และ meta tags มาตรฐานที่ใช้ทุกหน้า
+
+---
+
+## 10. โครงสร้างไฟล์เปลี่ยนแปลง (2026-07-11) — เพิ่มหน้า Intro/Splash
+
+- **`index.html`** ตอนนี้คือหน้า **Intro/Splash แบบ Cinematic 3D** (เดิมชื่อ `index-cinematic.html`) — เป็นหน้าแรกที่คนเห็นเมื่อเข้า `bullrock-group.com` มี hero + สถิติย่อ + ปุ่ม "เข้าสู่เว็บไซต์" นำไปหน้าแรกจริง ไม่มี section บริการ/ลูกค้า/ฟอร์มซ้ำกับหน้าแรกจริง (ตัดออกเพื่อไม่ให้ซ้ำซ้อน)
+- **`home.html`** คือหน้าแรกจริง (เนื้อหาเดิมทั้งหมดของ `index.html` เก่า — services, about teaser, why us, ลูกค้า, OneGo, ฟอร์มติดต่อ) ทุกหน้าอื่น (about/services/contact) ลิงก์ "หน้าแรก" และโลโก้ navbar ทั้งหมดชี้ไปที่ `home.html` แล้ว (ไม่ใช่ `index.html`) — คลิกโลโก้จากหน้าไหนก็ตามจะไปหน้าแรกจริงเสมอ ไม่วนกลับไป splash
+- **`DO-GIT-PUSH.bat`** อัปเดต git add ให้รวม `home.html` แล้ว
+- ไฟล์ `index-cinematic.html` และ `bullrock-express-standalone.html` (ไฟล์ทดลอง/ออฟไลน์เดิม) ถูกลบแล้วเพราะรวมเข้า `index.html` ที่ใช้งานจริงแทน
