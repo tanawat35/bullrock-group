@@ -520,32 +520,6 @@
     .why-title { font-family: var(--font-head); font-size: 1.0625rem; font-weight: 700; color: white; margin-bottom: 10px; }
     .why-desc { font-size: 0.89rem; color: rgba(255,255,255,0.50); line-height: 1.8; }
 
-    /* ====================== ONEGO ====================== */
-    .onego { background: white; padding: 100px 0; position: relative; overflow: hidden; }
-    .onego::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background: linear-gradient(90deg, var(--green), var(--green-light)); }
-    .onego-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-    .onego-img-wrap { position:relative; border-radius: var(--radius-xl); overflow:hidden; box-shadow: var(--shadow-xl); background: #f0fdf4; cursor: zoom-in; }
-    .onego-img-wrap img { width:100%; height:auto; max-height:600px; object-fit:contain; object-position:center; display:block; transition: transform 0.4s var(--ease); }
-    .onego-img-wrap:hover img { transform: scale(1.03); }
-    .onego-img-ov { position:absolute; inset:0; background: linear-gradient(180deg,transparent 50%,rgba(14,112,54,0.2) 100%); pointer-events: none; }
-    .onego-img-wrap::after { content:'⤢'; position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); color:white; font-size:1.1rem; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.25s; pointer-events:none; }
-    .onego-img-wrap:hover::after { opacity:1; }
-
-    .onego-logo-row { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
-    .onego-logo-row img { height:52px; width:auto; object-fit:contain; }
-    .onego-new { padding:4px 12px; background:var(--green-bg); color:var(--green); border:1px solid rgba(22,163,74,0.22); border-radius:var(--radius-pill); font-family:var(--font-head); font-size:0.68rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; }
-    .onego-desc { font-size: 1.0625rem; color: var(--text-mid); line-height: 1.85; margin-bottom: 28px; }
-    .onego-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 36px; }
-    .onego-feat { display:flex; align-items:flex-start; gap:9px; font-size:0.89rem; color:var(--text-mid); }
-    .onego-feat-ico { flex-shrink:0; width:20px; height:20px; background:var(--green-bg); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--green); margin-top:2px; }
-    .onego-feat-ico svg { width:11px; height:11px; }
-    .onego-cta-row { display:flex; align-items:center; gap:20px; padding:22px; background:var(--green-bg); border-radius:var(--radius-lg); border:1px solid rgba(22,163,74,0.18); }
-    .onego-qr-img { width:92px; height:92px; border-radius:var(--radius-sm); object-fit:contain; background:white; padding:4px; border:2px solid rgba(22,163,74,0.2); flex-shrink:0; }
-    .onego-cta-label { font-family:var(--font-head); font-size:1rem; font-weight:700; color:var(--green); margin-bottom:4px; }
-    .onego-cta-sub { font-size:0.875rem; color:var(--text-mid); line-height:1.55; }
-    .onego-tel { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:0.875rem; color:var(--text-mid); }
-    .onego-tel svg { width:15px; height:15px; color:var(--green); flex-shrink:0; }
-
     /* ====================== CONTACT ====================== */
     .contact { background: var(--off-white); padding: 100px 0; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 60px; align-items: start; }
@@ -651,7 +625,7 @@
       .hero-inner { grid-template-columns: 1fr; padding: 110px 0 64px; }
       .hero-visual { display: none; }
       .services-grid { grid-template-columns: repeat(2,1fr); }
-      .about-grid, .onego-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
       .stats-grid { grid-template-columns: repeat(2,1fr); }
       .stats-bar { margin-top: -40px; }
     }
@@ -660,7 +634,6 @@
       .why-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-      .onego-feats { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
@@ -992,45 +965,7 @@
   </div>
 </section>
 
-<!-- ONEGO -->
-<section class="onego" id="onego">
-  <div class="container">
-    <div class="onego-grid">
-      <div class="onego-img-wrap reveal">
-        <img src="assets/onego-service.png" alt="One Go — ส่งพัสดุใหญ่และพัสดุพิเศษ" loading="lazy">
-        <div class="onego-img-ov"></div>
-      </div>
-      <div class="reveal d1">
-        <div class="onego-logo-row">
-          <img src="assets/logo-onego.jpg" alt="One Go Logo">
-          <span class="onego-new">แบรนด์ใหม่</span>
-        </div>
-        <div class="tag tag-green" style="margin-bottom:16px;">One Go — ส่งพัสดุใหญ่ &amp; พัสดุพิเศษ</div>
-        <h2 class="section-title" style="margin-bottom:16px;">ส่งเร็ว ปลอดภัย<br>ส่งไวเหมือนอยู่ใกล้กัน</h2>
-        <p class="onego-desc">เฟอร์นิเจอร์ เครื่องใช้ไฟฟ้า มอเตอร์ไซค์ ของแช่แข็ง หรือแม้แต่สัตว์เลี้ยงทุกชนิด — One Go พร้อมรับทุกงานที่บริษัทขนส่งทั่วไปไม่รับ</p>
-        <div class="onego-feats">
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Door-to-Door รับถึงบ้าน</div>
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>ตีลังไม้ แพ็กกิ้งพิเศษ</div>
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>ประกันสินค้าครบวงจร</div>
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>รับส่งสัตว์เลี้ยงทุกชนิด</div>
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>ราคาโปร่งใส ประเมินฟรี</div>
-          <div class="onego-feat"><div class="onego-feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>กทม. ปริมณฑล ภาคเหนือ อีสาน</div>
-        </div>
-        <div class="onego-cta-row">
-          <img src="assets/line-oa-qr.png" alt="LINE OA QR — One Go" class="onego-qr-img">
-          <div>
-            <div class="onego-cta-label">LINE Official Account</div>
-            <div class="onego-cta-sub">สแกน QR เพื่อติดต่อ One Go โดยตรง<br>บริการส่งพัสดุขนาดใหญ่และพัสดุพิเศษ</div>
-            <div class="onego-tel">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.41 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.53 6.53l.66-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              062-782-8610 / 082-594-1466
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
@@ -1090,7 +1025,6 @@
               <option>บริการให้เช่ารถขนส่ง</option>
               <option>ระบบบริหารขนส่ง TMS/GPS</option>
               <option>บริหารจัดการองค์กร</option>
-              <option>One Go — ส่งพัสดุพิเศษ</option>
             </select>
           </div>
           <div class="fg"><label class="fl">รายละเอียดเพิ่มเติม</label><textarea class="fi" placeholder="อธิบายความต้องการของคุณ..."></textarea></div>
@@ -1115,7 +1049,6 @@
           <li><a href="home.html">หน้าแรก</a></li>
           <li><a href="services.html">บริการของเรา</a></li>
           <li><a href="about.html">เกี่ยวกับเรา</a></li>
-          <li><a href="#onego">One Go</a></li>
           <li><a href="contact.html">ติดต่อเรา</a></li>
         </ul>
       </div>
@@ -1138,7 +1071,7 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-copy">© 2025 BULLROCK GROUP. สงวนลิขสิทธิ์</div>
-      <div class="footer-copy">BULLROCK EXPRESS · BULLROCK HOLDING · ONE GO</div>
+      <div class="footer-copy">BULLROCK EXPRESS · BULLROCK HOLDING</div>
     </div>
   </div>
 </footer>
@@ -1473,14 +1406,6 @@ function closeLightbox() {
   document.body.style.overflow = '';
   setTimeout(() => { lightboxImg.src = ''; }, 350);
 }
-
-// OneGo image lightbox
-document.querySelectorAll('.onego-img-wrap').forEach(wrap => {
-  wrap.addEventListener('click', () => {
-    const img = wrap.querySelector('img');
-    if (img) openLightbox(img.src, img.alt);
-  });
-});
 
 // Attach click to service image containers (overlay sits on top of img)
 document.querySelectorAll('.svc-img').forEach(wrapper => {
