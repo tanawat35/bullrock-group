@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>จับลำดับคิว ANTA | BULLROCK EXPRESS</title>
+<link rel="icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+</style>
+<style id="app-css">
+/* Layout: one column — ball-drop board (pegs → ramp → conveyor → 17 cups) on top, ball legend, 17 slots, history, organiser panel */
+:root {
+  --bg: #eef2f4; --panel: #ffffff; --ink: #15242e; --muted: #5a6b76; --line: #d3dce1;
+  --ball: #f2b705; --ball-ink: #2a2000; --go: #3b2560; --go-ink: #ffffff;
+  --ok: #1d7a44; --warn: #a35a00; --bad: #b3261e; --slot-empty: #e3e9ec;
+  --board: #1a0d2b;
+  --display: "Bai Jamjuree", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --body: "IBM Plex Sans Thai", "Sarabun", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e171d; --panel: #16222a; --ink: #e6eef2; --muted: #95a6b0; --line: #2a3a44;
+    --ball: #f5c131; --ball-ink: #241b00; --go: #c7a8f0; --go-ink: #160b24;
+    --ok: #5cc98a; --warn: #f0a640; --bad: #f2867f; --slot-empty: #1d2b34; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e171d; --panel: #16222a; --ink: #e6eef2; --muted: #95a6b0; --line: #2a3a44;
+  --ball: #f5c131; --ball-ink: #241b00; --go: #c7a8f0; --go-ink: #160b24;
+  --ok: #5cc98a; --warn: #f0a640; --bad: #f2867f; --slot-empty: #1d2b34; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 16px; }
+header { display: grid; gap: 4px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 6vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-size: 18px; margin: 0; }
+.sub { color: var(--muted); margin: 0; max-width: 60ch; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+.stage { justify-items: center; text-align: center; padding: 14px 12px 18px; }
+.boardBox { width: min(400px, 100%); max-width: 100%; aspect-ratio: 360 / 672; border-radius: 12px; overflow: hidden; background: var(--board); }
+.boardBox canvas { width: 100%; height: 100%; display: block; }
+.say { font-family: var(--display); font-size: 22px; font-weight: 700; margin: 0; min-height: 1.3em; text-wrap: balance; }
+.say .pos { display: inline-block; min-width: 1.6em; padding: 0 .35em; margin-right: .3em; border-radius: 99px; background: var(--ball); color: var(--ball-ink); font-family: var(--mono); }
+.hint { color: var(--muted); font-size: 13px; margin: 0; max-width: 54ch; }
+.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 13px var(--body); padding: 3px 10px 3px 3px;
+  border-radius: 99px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.chip .dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 11px var(--mono); color: #10151a; }
+.chip[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ball); }
+.slots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.slot { display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: 10px; min-width: 0;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px 8px 8px; }
+.slot .num { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--mono); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;
+  background: var(--slot-empty); color: var(--muted); }
+.slot .name { min-width: 0; overflow-wrap: anywhere; color: var(--muted); }
+.slot.filled .num { background: var(--ball); color: var(--ball-ink); }
+.slot.filled .name { color: var(--ink); font-weight: 600; }
+.slot.filled.fresh { animation: land .35s ease-out; }
+@keyframes land { from { transform: translateY(-6px); opacity: .4 } to { transform: none; opacity: 1 } }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+button.act { font-family: var(--display); font-weight: 700; font-size: 17px; border: 0; border-radius: 10px;
+  padding: 12px 22px; cursor: pointer; background: var(--go); color: var(--go-ink); }
+button.act.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 500; font-size: 15px; }
+button.act.confirm { background: var(--warn); color: #fff; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible { outline: 3px solid var(--ball); outline-offset: 2px; }
+.status { margin: 0; font-size: 14px; }
+.status.ok { color: var(--ok); } .status.warn { color: var(--warn); } .status.bad { color: var(--bad); }
+a { color: var(--go); }
+.hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.hist li { display: flex; flex-wrap: wrap; gap: 4px 12px; border-top: 1px solid var(--line); padding-top: 6px; }
+.hist .r { font-family: var(--mono); font-weight: 600; }
+.hist .t { color: var(--muted); font-family: var(--mono); font-size: 13px; }
+.badge { font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--slot-empty); color: var(--muted); }
+.badge.now { background: var(--ball); color: var(--ball-ink); }
+details summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+details ol { margin: 6px 0 0; padding-left: 28px; columns: 2 180px; font-size: 14px; }
+textarea { width: 100%; font: 13px var(--mono); }
+@media (prefers-reduced-motion: reduce) { .slot.filled.fresh { animation: none; } }
+.tokenRow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tokenRow input { flex: 1 1 220px; min-width: 0; font: 14px var(--mono); padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.loading { padding: 40px 16px; text-align: center; color: var(--muted); font-family: var(--body); }
+</style>
+</head>
+<body>
+<div id="app"><p class="loading">กำลังโหลด…</p></div>
+<script id="state" type="application/json">{"roster":["มีนา เรืองศิริ","ธนวัฒน์ หอมชื่น","ภาณุวัฒน์ ครึ้มค้างพลู","สัญชัย ศรีอินทร์จันทร์","ธนูเดช เชื้อวงษ์","พีระยุทธ์ คำดี","เลอสรรค์ โคขุนทด","สมบูรณ์ เครือยิหวา","อัครินทร์ กุลศิริธนวัฒน์","ชาญวิทย์ ภู่พงษ์สิน","ศุภสิทธิ์ จันทร์สิน","วัลลภ บุตรดี","บุญมาก ปริธรรมมา","อาสือมั่น ตาเฮ","วันเฉลิม มงคลบุตร","แสงทอง ด่านระหาร","ปุณณวิช แสงใส"],"rounds":[]}</script>
+<script id="app-js">
+(async function () {
+  "use strict";
+  const SENDER_URL = "https://claude.ai/artifact/KNPkVGp6xKN3qu3GtH6ZNF";
+  const LEAD_MS = 150000;  // countdown before the gate opens: GitHub needs ~1 minute to publish the new round to every phone
+
+  // ================= board geometry (world units, 360 × 672) =================
+  const W = 360, H = 672, R = 8.5, PR = 3.5, TAU = Math.PI * 2;
+  const FY0 = 352, FY1 = 480, EX = 11.5, FIN = 505;             // funnel top/bottom, half exit width (one ball at a time), finish line
+  const BELT_Y = 566, X0 = 11.5, BELT_V = 150;                  // conveyor top, ball start x on belt, belt speed px/s
+  const GX0 = W / 2, GY0 = FIN + 6, GX1 = X0 + 4, GY1 = 530;      // single-file gutter from the exit, ending above the belt's left end (ball-centre path)
+  const CUP_TOP = 592, CUP_BOT = 640, CUP_REST = CUP_BOT - R - 2;
+  const G = 980;
+  const PEGS = [];
+  for (let row = 0; row < 10; row++) { const y = 60 + row * 30; const off = row % 2 ? 18 : 0; for (let x = 18 + off; x <= 342; x += 36) if (x > 2 * R + PR + 8 && x < W - (2 * R + PR + 8)) PEGS.push([x, y]); }   // no peg so close to a wall that a ball could wedge
+  const SEGS = [[0, 0, 0, FY0], [W, 0, W, FY0], [0, FY0, W / 2 - EX, FY1], [W, FY0, W / 2 + EX, FY1], [W / 2 - EX, FY1, W / 2 - EX, FIN - 2], [W / 2 + EX, FY1, W / 2 + EX, FIN - 2]];
+  const LEDGES = [];   // angled wall bumpers so no ball can free-fall down a wall
+  for (let row = 0; row < 10; row += 2) { const y = 60 + row * 30; LEDGES.push([0, y - 12, 15, y + 1], [W, y - 12, W - 15, y + 1]); }
+  LEDGES.forEach(l => SEGS.push(l));
+  const startX = (s, B) => 22 + s * (316 / Math.max(B - 1, 1));
+  const START_Y = 18;
+  const holeX = k => (k + 0.5) * (W / 17);
+
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  // Physics race: gravity, spin and rolling friction (solid spheres), speed-dependent bounce, ball-to-ball hits.
+  // start[b] = start slot of ball b. Returns finish order (ball ids), exit times (ms) and positions recorded
+  // at 30 fps as [x×2, y×2, angle×10] so every screen replays the identical race.
+  function simulate(start, seed) {
+    const B = start.length, rnd = mulberry32(seed), DT = 1 / 480, REC = 16, WMAX = 70;
+    const x = [], y = [], vx = [], vy = [], w = [], an = [], live = [];
+    for (let b = 0; b < B; b++) { x[b] = startX(start[b], B) + (rnd() - 0.5) * 3; y[b] = START_Y; vx[b] = (rnd() - 0.5) * 16; vy[b] = 0; w[b] = 0; an[b] = rnd() * TAU; live[b] = true; }
+    const frames = [], exitT = new Array(B).fill(-1), order = [];
+    const rec = () => { for (let b = 0; b < B; b++) frames.push(Math.round(x[b] * 2), Math.round(y[b] * 2), Math.round(an[b] * 10)); };
+    rec();
+    function contact(b, px, py, rad, e0, mu) {
+      const dx = x[b] - px, dy = y[b] - py, d2 = dx * dx + dy * dy, m = R + rad;
+      if (d2 >= m * m || d2 === 0) return;
+      const d = Math.sqrt(d2), nx = dx / d, ny = dy / d;
+      x[b] = px + nx * m; y[b] = py + ny * m;
+      const vn = vx[b] * nx + vy[b] * ny; let jn = 0;
+      if (vn < 0) { const e = -vn < 35 ? 0 : e0; jn = -(1 + e) * vn; vx[b] += jn * nx; vy[b] += jn * ny; }
+      const tx = -ny, ty = nx, slip = vx[b] * tx + vy[b] * ty - w[b] * R;   // contact-point slip
+      let J = -slip / 3.5; const cap = mu * jn; if (J > cap) J = cap; else if (J < -cap) J = -cap;
+      vx[b] += J * tx; vy[b] += J * ty; w[b] -= 2.5 * J / R;
+    }
+    let t = 0, step = 0, alive = B, lastExit = 2, nextKick = 0, kicks = 0;
+    while (alive > 0 && t < 120) {
+      for (let b = 0; b < B; b++) if (live[b]) {
+        vy[b] += G * DT; vx[b] *= 0.9998; vy[b] *= 0.9998;
+        w[b] *= 0.9993; if (w[b] > WMAX) w[b] = WMAX; else if (w[b] < -WMAX) w[b] = -WMAX;
+        x[b] += vx[b] * DT; y[b] += vy[b] * DT; an[b] += w[b] * DT;
+      }
+      for (let it = 0; it < 2; it++) {
+        for (let i = 0; i < B; i++) if (live[i]) for (let j = i + 1; j < B; j++) if (live[j]) {
+          const dx = x[j] - x[i], dy = y[j] - y[i], d2 = dx * dx + dy * dy;
+          if (d2 >= 4 * R * R || d2 === 0) continue;
+          const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, ov = (2 * R - d) / 2;
+          x[i] -= nx * ov; y[i] -= ny * ov; x[j] += nx * ov; y[j] += ny * ov;
+          const rel = (vx[j] - vx[i]) * nx + (vy[j] - vy[i]) * ny;
+          if (rel < 0) {
+            const e = -rel < 35 ? 0 : 0.45, im = -(1 + e) * rel / 2;
+            vx[i] -= im * nx; vy[i] -= im * ny; vx[j] += im * nx; vy[j] += im * ny;
+            const tx = -ny, ty = nx, slip = (vx[j] - vx[i]) * tx + (vy[j] - vy[i]) * ty + (w[i] + w[j]) * R;   // surfaces rubbing
+            let J = slip / 7; const cap = 0.1 * im; if (J > cap) J = cap; else if (J < -cap) J = -cap;
+            vx[i] += J * tx; vy[i] += J * ty; vx[j] -= J * tx; vy[j] -= J * ty; w[i] -= 2.5 * J / R; w[j] -= 2.5 * J / R;
+          }
+        }
+        for (let b = 0; b < B; b++) if (live[b]) {
+          if (y[b] < FY0) for (let p = 0; p < PEGS.length; p++) { const P = PEGS[p]; if (Math.abs(P[1] - y[b]) < 13) contact(b, P[0], P[1], PR, 0.55, 0.25); }
+          for (let s = 0; s < SEGS.length; s++) {
+            const S = SEGS[s], ax = S[0], ay = S[1], ex = S[2] - ax, ey = S[3] - ay;
+            let u = ((x[b] - ax) * ex + (y[b] - ay) * ey) / (ex * ex + ey * ey); u = u < 0 ? 0 : u > 1 ? 1 : u;
+            contact(b, ax + u * ex, ay + u * ey, 2, 0.35, 0.4);
+          }
+          if (y[b] < R) { y[b] = R; vy[b] = Math.abs(vy[b]) * 0.3; }
+        }
+      }
+      t += DT; step++;
+      for (let b = 0; b < B; b++) if (live[b] && y[b] > FIN) { live[b] = false; alive--; exitT[b] = Math.round(t * 1000); order.push(b); lastExit = t; }
+      if (t - lastExit > 3 && t >= nextKick) {   // shake the board only if a ball is truly stuck
+        for (let b = 0; b < B; b++) if (live[b] && vx[b] * vx[b] + vy[b] * vy[b] < 900) { vx[b] += (rnd() - 0.5) * 120; vy[b] -= rnd() * 140; kicks++; }
+        nextKick = t + 0.35;
+      }
+      if (step % REC === 0) rec();
+    }
+    if (alive > 0) {   // safety net: never seen in testing; closest to the exit goes first
+      const rest = []; for (let b = 0; b < B; b++) if (live[b]) rest.push(b);
+      rest.sort((a, c) => y[c] - y[a]).forEach((b, i) => { exitT[b] = Math.round(t * 1000) + i * 300; order.push(b); });
+    }
+    rec();
+    return { order, exitT, frames, kicks };
+  }
+
+  // ================= state =================
+  // Rounds live in round.json next to this page. Everyone polls it; the organiser writes it through the GitHub API.
+  let clockOffset = 0; const offs = [];
+  function nowS() { return Date.now() + clockOffset; }   // server-synced clock so every phone opens the gate together
+  async function fetchState() {
+    const t0 = Date.now(), res = await fetch("round.json?t=" + t0, { cache: "no-store" }), t1 = Date.now();
+    if (!res.ok) throw new Error("http " + res.status);
+    const d = res.headers.get("Date");
+    if (d) { offs.push(Date.parse(d) + 500 - (t0 + t1) / 2); if (offs.length > 7) offs.shift(); const s = offs.slice().sort((a, b) => a - b); clockOffset = s[Math.floor(s.length / 2)]; }
+    return res.json();
+  }
+  let STATE;
+  try { STATE = await fetchState(); }
+  catch (e) { STATE = JSON.parse(document.getElementById("state").textContent); }   // snapshot if round.json can't be read
+  document.getElementById("app").textContent = "";
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ROSTER = STATE.roster, B = ROSTER.length;
+  let REAL = STATE.rounds.length ? STATE.rounds[STATE.rounds.length - 1] : null;   // the saved round everyone sees
+  let current = REAL, race = REAL && REAL.race ? REAL.race : null, testing = false;     // what this screen is playing
+  const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const ballColor = b => "hsl(" + Math.round(((b * 7) % 17) * 360 / 17) + " 78% 62%)";
+  const rankOf = new Array(B).fill(-1);
+  function setRanks() { rankOf.fill(-1); if (current) current.order.forEach((n, k) => { const b = ROSTER.indexOf(n); if (b >= 0) rankOf[b] = k; }); }
+  setRanks();
+
+  const fmt = iso => new Date(iso).toLocaleString("th-TH", { timeZone: "Asia/Bangkok", dateStyle: "medium", timeStyle: "short" });
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const first = n => n.split(" ")[0];
+
+  // ================= markup =================
+  const app = document.getElementById("app");
+  const wrap = el("div", "wrap"); app.append(wrap);
+  const header = el("header");
+  header.append(el("span", "eyebrow", "BULLROCK EXPRESS · ANTA · รถ 4W"), el("h1", null, "ปล่อยลูกบอลจับลำดับคิว"),
+    el("p", "sub", "ลูกบอล 17 ลูก ลูกละคน เริ่มจากช่องที่สุ่มให้ ปล่อยพร้อมกัน เด้งผ่านหมุดลงกรวย ลูกไหนหลุดออกจากกรวยก่อนได้ลำดับก่อน แล้วสายพานพาไปลงหลุมตามลำดับ 1 ถึง 17"));
+  wrap.append(header);
+
+  const stage = el("section", "panel stage"); stage.setAttribute("aria-live", "polite");
+  const boardBox = el("div", "boardBox"); const canvas = el("canvas"); canvas.setAttribute("aria-hidden", "true"); boardBox.append(canvas);
+  const say = el("p", "say"); const hint = el("p", "hint");
+  const legendTitle = el("p", "hint", "แตะชื่อตัวเองเพื่อไฮไลต์ลูกบอลของคุณ");
+  const legend = el("div", "legend");
+  stage.append(say, boardBox, hint, legendTitle, legend); wrap.append(stage);
+
+  let mine = -1;
+  try { const v = localStorage.getItem("anta-mine"); if (v != null && ROSTER[+v]) mine = +v; } catch (e) {}
+  const chips = ROSTER.map((n, b) => {
+    const c = el("button", "chip"); c.type = "button"; c.setAttribute("aria-pressed", String(b === mine));
+    const dot = el("span", "dot", LETTERS[b]); dot.style.background = ballColor(b); c.append(dot, first(n));
+    c.addEventListener("click", () => {
+      mine = mine === b ? -1 : b; chips.forEach((x, i) => x.setAttribute("aria-pressed", String(i === mine)));
+      try { localStorage.setItem("anta-mine", String(mine)); } catch (e) {}
+      if (!running) draw(nowS());
+    });
+    legend.append(c); return c;
+  });
+
+  const slots = el("ol", "slots"); const slotEls = [];
+  for (let i = 0; i < B; i++) { const li = el("li", "slot"); li.append(el("span", "num", String(i + 1)), el("span", "name", "รอจับ")); slots.append(li); slotEls.push(li); }
+  wrap.append(slots);
+
+  const histBox = el("section", "panel"); histBox.append(el("h2", null, "ประวัติการจับ"));
+  const hist = el("ul", "hist");
+  histBox.append(el("p", "hint", "ทุกครั้งที่กดจับจะถูกเก็บไว้ตรงนี้ ถ้ามีการจับใหม่ ทุกคนจะเห็นรอบเก่าด้วย"), hist); wrap.append(histBox);
+
+  const owner = el("section", "panel"); owner.hidden = true;
+  owner.append(el("h2", null, "สำหรับผู้จัดคิว"));
+  const ownerBtns = el("div", "btns");
+  const drawBtn = el("button", "act", ""); drawBtn.type = "button"; drawBtn.id = "drawBtn";
+  const copyBtn = el("button", "act ghost", "คัดลอกผลไปส่งเข้า Sheet"); copyBtn.type = "button"; copyBtn.id = "copyBtn";
+  const testBtn = el("button", "act ghost", "ทดลองปล่อย (เห็นแค่เครื่องนี้ ไม่บันทึก)"); testBtn.type = "button"; testBtn.id = "testBtn";
+  const backBtn = el("button", "act ghost", "กลับไปดูผลจริง"); backBtn.type = "button"; backBtn.id = "backBtn"; backBtn.hidden = true;
+  ownerBtns.append(drawBtn, testBtn, backBtn, copyBtn);
+  const ownerStatus = el("p", "status");
+  const senderP = el("p", "hint"); senderP.append("ส่งเข้า Sheet: คัดลอกผล แล้ววางในหน้า ");
+  const a = el("a", null, "ส่งผลเข้า Sheet"); a.href = SENDER_URL; a.target = "_blank"; a.rel = "noopener"; senderP.append(a);
+  const copyArea = el("textarea"); copyArea.id = "copyArea"; copyArea.rows = 6; copyArea.readOnly = true; copyArea.hidden = true;
+  const tokenRow = el("div", "tokenRow");
+  const tokenInput = el("input"); tokenInput.id = "tokenInput"; tokenInput.type = "password"; tokenInput.autocomplete = "off"; tokenInput.placeholder = "วาง GitHub token (github_pat_…)";
+  const saveTokenBtn = el("button", "act ghost", "บันทึก token"); saveTokenBtn.type = "button"; saveTokenBtn.id = "saveTokenBtn";
+  const clearTokenBtn = el("button", "act ghost", "ลบ token จากเครื่องนี้"); clearTokenBtn.type = "button"; clearTokenBtn.id = "clearTokenBtn";
+  tokenRow.append(tokenInput, saveTokenBtn, clearTokenBtn);
+  const tokenState = el("p", "hint");
+  owner.append(ownerBtns, ownerStatus, senderP, copyArea, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
+
+  function renderHistory() {
+    hist.textContent = "";
+    if (!STATE.rounds.length) hist.append(el("li", null, "ยังไม่มีการจับ"));
+    for (let i = STATE.rounds.length - 1; i >= 0; i--) {
+      const r = STATE.rounds[i]; const li = el("li");
+      li.append(el("span", "r", "รอบที่ " + r.n), el("span", "t", "จับเมื่อ " + fmt(r.drawnAt)));
+      li.append(el("span", "badge" + (r === REAL ? " now" : ""), r === REAL ? "ใช้รอบนี้" : "ถูกแทนด้วยรอบถัดไป"));
+      if (r !== REAL) { const d = el("details"); d.append(el("summary", null, "ดูลำดับ")); const ol = el("ol"); r.order.forEach(n => ol.append(el("li", null, n))); d.append(ol); li.append(d); }
+      hist.append(li);
+    }
+  }
+  renderHistory();
+
+  // ================= replay maths =================
+  const FPS_MS = 1000 / 30;
+  function simPos(b, e) {   // recorded position of ball b at race time e (ms)
+    const fr = race.frames, n = fr.length / (3 * B) - 1, f = Math.max(e, 0) / FPS_MS, i = Math.floor(f), u = f - i;
+    const i0 = Math.min(i, n), i1 = Math.min(i + 1, n), o0 = i0 * 3 * B + b * 3, o1 = i1 * 3 * B + b * 3;
+    return { x: (fr[o0] + (fr[o1] - fr[o0]) * u) / 2, y: (fr[o0 + 1] + (fr[o1 + 1] - fr[o0 + 1]) * u) / 2, a: (fr[o0 + 2] + (fr[o1 + 2] - fr[o0 + 2]) * u) / 10 };
+  }
+  // After a ball leaves the chute: fall onto the belt, ride to its hole, flap opens, drop into the cup.
+  const DROP_H = CUP_REST - (BELT_Y - R);
+  const BOUNCE = (() => { const segs = []; let v = Math.sqrt(2 * G * DROP_H), t = Math.sqrt(2 * DROP_H / G) * 1000; segs.push({ t0: 0, t1: t, kind: "fall" });
+    for (let i = 0; i < 3; i++) { v *= 0.4; const dur = 2 * v / G * 1000; segs.push({ t0: t, t1: t + dur, v }); t += dur; } return { segs, total: t }; })();
+  function cupY(t) {
+    const s0 = BOUNCE.segs[0];
+    if (t < s0.t1) { const s = t / 1000; return BELT_Y - R + 0.5 * G * s * s; }
+    for (let i = 1; i < BOUNCE.segs.length; i++) { const s = BOUNCE.segs[i]; if (t < s.t1) { const q = (t - s.t0) / 1000; return CUP_REST - (s.v * q - 0.5 * G * q * q); } }
+    return CUP_REST;
+  }
+  const GL = Math.hypot(GX1 - GX0, GY1 - GY0), GV0 = 140, GA = 0.714 * G * (GY1 - GY0) / GL;   // rolling down the gutter
+  const gutterMs = (-GV0 + Math.sqrt(GV0 * GV0 + 2 * GA * GL)) / GA * 1000;
+  const gutterD = t => { const q = t / 1000; return Math.min(GV0 * q + 0.5 * GA * q * q, GL); };
+  const DROPB_MS = Math.sqrt(2 * (BELT_Y - R - GY1) / G) * 1000;   // gutter end → belt
+  let sched = [];   // per rank k
+  let END_MS = 0;
+  function buildSched() {
+    sched = []; END_MS = 0; if (!race) return;
+    let prevG = -1e9, prevB = -1e9; const GAPG = (2 * R + 3) / GV0 * 1000, GAPB = (2 * R + 4) / BELT_V * 1000;
+    for (let k = 0; k < current.order.length; k++) {
+      const b = ROSTER.indexOf(current.order[k]), ex = race.exitT[b], p = simPos(b, ex);
+      const fallMs = Math.sqrt(Math.max(2 * (GY0 - p.y) / G, 0)) * 1000;
+      const g0 = Math.max(ex + fallMs, prevG + GAPG); prevG = g0;           // single file into the gutter
+      const g1 = g0 + gutterMs, start = Math.max(g1 + DROPB_MS, prevB + GAPB); prevB = start;
+      const drop = start + Math.max(holeX(k) - X0, 0) / BELT_V * 1000;
+      sched[k] = { b, ex, p, fallEnd: ex + fallMs, g0, g1, start, drop, inCup: drop + BOUNCE.segs[0].t1 };
+      END_MS = Math.max(END_MS, drop + BOUNCE.total + 300);
+    }
+  }
+  buildSched();
+  function ballAt(b, e) {
+    if (!race) return current && rankOf[b] >= 0 ? { x: holeX(rankOf[b]), y: CUP_REST, a: 0 } : { x: startX(b, B), y: START_Y, a: b };   // rounds without a replay show the result in the cups
+    if (e <= race.exitT[b]) return simPos(b, e);
+    const s = sched[rankOf[b]], p = s.p;
+    if (e < s.g0) {   // falling out of the chute, or waiting in line for the gutter
+      let qi = 0; for (let j = 0; j < rankOf[b]; j++) if (sched[j].g0 > e) qi++;
+      const yStop = GY0 - qi * (2 * R), q = (e - s.ex) / 1000, u = Math.min((e - s.ex) / Math.max(s.fallEnd - s.ex, 1), 1);
+      return { x: p.x + (GX0 - p.x) * u, y: Math.min(p.y + 0.5 * G * q * q, yStop), a: p.a };
+    }
+    const aG = p.a - GL / R;
+    if (e < s.g1) { const d = gutterD(e - s.g0), u = d / GL; return { x: GX0 + (GX1 - GX0) * u, y: GY0 + (GY1 - GY0) * u, a: p.a - d / R }; }
+    if (e < s.start) { const q = Math.max(e - s.g1, 0) / 1000; return { x: GX1 + (X0 - GX1) * Math.min(q * 5, 1), y: Math.min(GY1 + 0.5 * G * q * q, BELT_Y - R), a: aG }; }
+    if (e < s.drop) { const xx = X0 + BELT_V * (e - s.start) / 1000; return { x: xx, y: BELT_Y - R, a: aG + (xx - X0) / R }; }
+    const hx = holeX(rankOf[b]); return { x: hx, y: cupY(e - s.drop), a: aG + (hx - X0) / R };
+  }
+
+  // ================= drawing =================
+  const ctx = canvas.getContext("2d");
+  let scale = 1, staticLayer = null, fonts = { body: "sans-serif", mono: "monospace" };
+  function readFonts() { const s = getComputedStyle(document.documentElement); fonts = { body: s.getPropertyValue("--body").trim() || "sans-serif", mono: s.getPropertyValue("--mono").trim() || "monospace" }; }
+  function fit() {
+    const r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+    const w = Math.max(1, Math.round(r.width * d)), h = Math.round(w * H / W);
+    if (canvas.width !== w || canvas.height !== h || !staticLayer) { canvas.width = w; canvas.height = h; scale = w / W; buildStatic(); }
+  }
+  const hue = b => Math.round(((b * 7) % 17) * 360 / 17);
+  function buildStatic() {
+    staticLayer = document.createElement("canvas"); staticLayer.width = canvas.width; staticLayer.height = canvas.height;
+    const g = staticLayer.getContext("2d"); g.setTransform(scale, 0, 0, scale, 0, 0);
+    const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#2d1a4d"); bg.addColorStop(0.75, "#1a0d2b"); bg.addColorStop(1, "#12081f");
+    g.fillStyle = bg; g.fillRect(0, 0, W, H);
+    g.fillStyle = "rgba(255,255,255,0.05)"; g.fillRect(6, 6, W - 12, 26);
+    for (const P of PEGS) {
+      const pg = g.createRadialGradient(P[0] - 1.2, P[1] - 1.2, 0.3, P[0], P[1], PR + 0.5);
+      pg.addColorStop(0, "#fff7dc"); pg.addColorStop(0.5, "#f0c95e"); pg.addColorStop(1, "#9c7420");
+      g.beginPath(); g.arc(P[0], P[1], PR, 0, TAU); g.fillStyle = pg; g.fill();
+    }
+    g.lineCap = "round"; g.strokeStyle = "#e2b53e"; g.lineWidth = 3;
+    for (const L of LEDGES) { g.beginPath(); g.moveTo(L[0], L[1]); g.lineTo(L[2], L[3]); g.stroke(); }
+    // funnel, exit chute and gutter
+    g.fillStyle = "rgba(226,181,62,0.10)";
+    g.beginPath(); g.moveTo(0, FY0); g.lineTo(W / 2 - EX, FY1); g.lineTo(W / 2 - EX, FIN); g.lineTo(0, FIN); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(W, FY0); g.lineTo(W / 2 + EX, FY1); g.lineTo(W / 2 + EX, FIN); g.lineTo(W, FIN); g.closePath(); g.fill();
+    g.lineCap = "round"; g.strokeStyle = "#e2b53e"; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(0, FY0); g.lineTo(W / 2 - EX, FY1); g.lineTo(W / 2 - EX, FIN - 2); g.stroke();
+    g.beginPath(); g.moveTo(W, FY0); g.lineTo(W / 2 + EX, FY1); g.lineTo(W / 2 + EX, FIN - 2); g.stroke();
+    const nx = -(GY1 - GY0), ny = (GX1 - GX0), nl = Math.hypot(nx, ny), ox = -nx / nl * (R + 2), oy = -ny / nl * (R + 2);   // rail under the ball path
+    g.lineWidth = 3; g.strokeStyle = "#c9952a";
+    g.beginPath(); g.moveTo(GX0 + 14 + ox, GY0 + oy); g.lineTo(GX1 - 4 + ox, GY1 + oy); g.stroke();
+    g.fillStyle = "rgba(255,255,255,0.8)"; g.font = "600 10px " + fonts.body; g.textAlign = "left"; g.fillText("ทางออก", W / 2 + EX + 6, FIN - 6);
+    // cups
+    const cw = W / 17;
+    for (let k = 0; k < 17; k++) {
+      const x0 = k * cw + 2, x1 = (k + 1) * cw - 2;
+      g.fillStyle = "#0d0616"; g.beginPath(); g.moveTo(x0, CUP_TOP); g.lineTo(x0, CUP_BOT - 6); g.quadraticCurveTo(x0, CUP_BOT, x0 + 6, CUP_BOT); g.lineTo(x1 - 6, CUP_BOT); g.quadraticCurveTo(x1, CUP_BOT, x1, CUP_BOT - 6); g.lineTo(x1, CUP_TOP); g.closePath(); g.fill();
+      g.strokeStyle = "#c9952a"; g.lineWidth = 1.5; g.stroke();
+      g.fillStyle = "#f3d27a"; g.font = "600 11px " + fonts.mono; g.textAlign = "center"; g.fillText(String(k + 1), (x0 + x1) / 2, CUP_BOT + 16);
+    }
+    g.fillStyle = "#c9952a"; g.fillRect(0, CUP_BOT + 22, W, 2);
+  }
+  function drawBelt(e, moving) {
+    const y0 = BELT_Y, hgt = 9, off = moving ? (e * BELT_V / 1000) % 14 : 0;
+    ctx.fillStyle = "#2b3442"; ctx.fillRect(0, y0, W, hgt);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, y0, W, hgt); ctx.clip();
+    ctx.strokeStyle = "#4a5668"; ctx.lineWidth = 2;
+    for (let x = -14 + off; x < W + 14; x += 14) { ctx.beginPath(); ctx.moveTo(x, y0 + 1); ctx.lineTo(x + 4, y0 + hgt / 2); ctx.lineTo(x, y0 + hgt - 1); ctx.stroke(); }
+    ctx.restore();
+    // flaps open where a ball is dropping
+    if (race) for (let k = 0; k < sched.length; k++) {
+      const s = sched[k], o = e - s.drop; if (o < -80 || o > 450) continue;
+      const cx = holeX(k), half = R + 2, open = Math.min(1, (o + 80) / 120) * (o > 300 ? Math.max(0, 1 - (o - 300) / 150) : 1);
+      ctx.fillStyle = "#12081f"; ctx.fillRect(cx - half, y0, half * 2, hgt);
+      ctx.strokeStyle = "#8a96a8"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(cx - half, y0); ctx.lineTo(cx - half + 2, y0 + 2 + open * 12); ctx.moveTo(cx + half, y0); ctx.lineTo(cx + half - 2, y0 + 2 + open * 12); ctx.stroke();
+    }
+    ctx.fillStyle = "#5b677a"; ctx.beginPath(); ctx.arc(4, y0 + hgt / 2, 5, 0, TAU); ctx.arc(W - 4, y0 + hgt / 2, 5, 0, TAU); ctx.fill();
+  }
+  function drawBall(p, b, big) {
+    const r = big ? R + 1.2 : R, h = hue(b);
+    ctx.beginPath(); ctx.ellipse(p.x + 1.5, p.y + 2.5, r, r * 0.9, 0, 0, TAU); ctx.fillStyle = "rgba(0,0,0,0.28)"; ctx.fill();
+    const gr = ctx.createRadialGradient(p.x - r * 0.4, p.y - r * 0.45, r * 0.1, p.x, p.y, r);
+    gr.addColorStop(0, "hsl(" + h + " 90% 80%)"); gr.addColorStop(0.55, "hsl(" + h + " 75% 56%)"); gr.addColorStop(1, "hsl(" + h + " 70% 30%)");
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, TAU); ctx.fillStyle = gr; ctx.fill();
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);   // letter and band turn as the ball spins
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.62, 0, TAU); ctx.fillStyle = "rgba(255,255,255,0.88)"; ctx.fill();
+    ctx.fillStyle = "#10151a"; ctx.font = "700 8.5px " + fonts.mono; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(LETTERS[b], 0, 0.6);
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(p.x - r * 0.38, p.y - r * 0.42, r * 0.22, 0, TAU); ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.fill();
+    if (big) { ctx.beginPath(); ctx.arc(p.x, p.y, r + 2.5, 0, TAU); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.stroke(); }
+  }
+  function label(p, text) {
+    ctx.font = "600 11px " + fonts.body; const w = ctx.measureText(text).width + 12;
+    const lx = Math.min(Math.max(p.x - w / 2, 2), W - w - 2); let ly = p.y - R - 22; if (ly < 2) ly = p.y + R + 6;
+    ctx.fillStyle = "rgba(255,255,255,0.95)"; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(lx, ly, w, 17, 8); else ctx.rect(lx, ly, w, 17); ctx.fill();
+    ctx.fillStyle = "#10151a"; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(text, lx + 6, ly + 9);
+  }
+  function draw(now) {
+    fit(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(staticLayer, 0, 0); ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    let e = current && race ? now - current.revealAt : -1;
+    if (current && race && reduced && e > 0 && e < END_MS) e = END_MS;
+    drawBelt(e, e > 0 && e < END_MS);
+    if (e <= 0) { ctx.fillStyle = "#e2b53e"; ctx.fillRect(6, 30, W - 12, 3); }   // gate
+    const list = []; for (let b = 0; b < B; b++) if (b !== mine) list.push(b); if (mine >= 0) list.push(mine);
+    let minePos = null;
+    for (const b of list) { const p = ballAt(b, e); drawBall(p, b, b === mine); if (b === mine) minePos = p; }
+    if (minePos) label(minePos, first(ROSTER[mine]) + (current && race && rankOf[mine] >= 0 && e >= sched[rankOf[mine]].inCup ? " · ลำดับ " + (rankOf[mine] + 1) : ""));
+    if (current && race && e < 0) {
+      const s = Math.ceil(-e / 1000);
+      ctx.fillStyle = "rgba(8,14,26,0.72)"; ctx.beginPath(); ctx.arc(W / 2, 200, 52, 0, TAU); ctx.fill();
+      ctx.fillStyle = "#ffffff"; ctx.font = "700 46px " + fonts.mono; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(s), W / 2, 202);
+    }
+    return e;
+  }
+
+  // ================= timeline (clock-driven: every screen shows the same moment) =================
+  let filled = 0, running = false;
+  function fillTo(k, fresh) {
+    while (filled < k) { const li = slotEls[filled]; li.classList.add("filled"); if (fresh) li.classList.add("fresh"); li.querySelector(".name").textContent = current.order[filled]; filled++; }
+  }
+  function resetSlots() { filled = 0; slotEls.forEach(li => { li.classList.remove("filled", "fresh"); li.querySelector(".name").textContent = "รอจับ"; }); }
+  const tag = () => testing ? "ทดลอง" : "รอบที่ " + current.n;
+  function setSay(pos, name, text) { say.textContent = ""; if (pos) say.append(el("span", "pos", String(pos)), name); else say.textContent = text; }
+  function phase(now) {
+    if (!current || !race) return current ? "done" : "idle";
+    const e = now - current.revealAt; return e < 0 ? "countdown" : e < END_MS ? "running" : "done";
+  }
+  function tick() {
+    const now = nowS(), p = phase(now), e = draw(now);
+    if (p === "idle") { running = false; setSay(0, "", "รอผู้จัดคิวกดปล่อยลูกบอล"); hint.textContent = "เปิดหน้านี้ค้างไว้ได้เลย เมื่อผู้จัดคิวกด หน้านี้จะขึ้นนับถอยหลังเองภายในราว 1 นาที ไม่ต้องรีเฟรช"; return; }
+    if (p === "countdown") {
+      running = true; setSay(0, "", tag() + " · ปล่อยลูกใน " + Math.ceil(-e / 1000) + " วินาที");
+      hint.textContent = testing ? "โหมดทดลอง: เห็นแค่เครื่องนี้ ไม่บันทึก ไม่นับเป็นรอบ" : "ลูกบอลทุกลูกอยู่ในช่องเริ่มที่สุ่มไว้แล้ว ผลการแข่งคำนวณครั้งเดียวตอนผู้จัดคิวกด (" + fmt(current.drawnAt) + ") ทุกเครื่องจะเห็นภาพเดียวกัน";
+      return requestAnimationFrame(tick);
+    }
+    if (p === "running") {
+      running = true;
+      let out = 0; while (out < sched.length && sched[out].ex <= e) out++;
+      let k = 0; while (k < sched.length && sched[k].inCup <= e) k++;
+      fillTo(k, true);
+      if (k > 0) setSay(k, current.order[k - 1]);
+      else setSay(0, "", out ? "ลูกแรกหลุดแล้ว กำลังไหลไปที่สายพาน…" : "ปล่อยแล้ว! ลูกบอลกำลังลง…");
+      hint.textContent = "หลุดจากกรวยแล้ว " + out + " ลูก · ลงหลุมแล้ว " + k + " จาก " + B + " · " + (testing ? "โหมดทดลอง ไม่บันทึก" : "รอบที่ " + current.n);
+      return requestAnimationFrame(tick);
+    }
+    running = false; const late = filled === 0; fillTo(B, !late);
+    if (testing) { setSay(0, "", "ทดลองเสร็จ · ลำดับ 1: " + current.order[0]); hint.textContent = "ผลทดลองไม่ถูกบันทึกและไม่มีใครเห็น กด \"กลับไปดูผลจริง\" เพื่อกลับ"; }
+    else { setSay(0, "", "ลำดับรอบที่ " + current.n + " · ลำดับ 1: " + current.order[0]); hint.textContent = "จับเมื่อ " + fmt(current.drawnAt) + " · ลำดับนี้ใช้รันงานจนกว่าจะเริ่มรอบใหม่"; }
+    refreshOwner();
+  }
+  readFonts();
+  window.addEventListener("resize", () => { staticLayer = null; if (!running) draw(nowS()); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { readFonts(); staticLayer = null; if (!running) tick(); });
+
+  // ================= organiser (open this page with #organiser) =================
+  const REPO = "tanawat35/bullrock-group", PATH = "anta/round.json", BRANCH = "main", TOKEN_KEY = "anta-gh-token";
+  let armedUntil = 0, busy = false, pendingN = 0;
+  function status(cls, text) { ownerStatus.className = "status" + (cls ? " " + cls : ""); ownerStatus.textContent = text; }
+  function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
+  function showTokenState() { tokenState.textContent = getToken() ? "เครื่องนี้มี token แล้ว กดปล่อยจริงได้" : "ยังไม่มี token บนเครื่องนี้ ใส่ token ที่สร้างจาก GitHub (สิทธิ์เขียนเฉพาะ repo bullrock-group) เพื่อให้ปุ่มปล่อยจริงบันทึกผลได้"; }
+  function refreshOwner() {
+    if (owner.hidden) return;
+    const p = phase(nowS()), nextN = (REAL ? REAL.n : 0) + 1, moving = p === "countdown" || p === "running";
+    copyBtn.disabled = !REAL || testing || p !== "done"; drawBtn.className = "act";
+    testBtn.disabled = busy || moving; backBtn.hidden = !testing; backBtn.disabled = moving;
+    if (busy) { drawBtn.disabled = true; return; }
+    if (!getToken()) { drawBtn.disabled = true; drawBtn.textContent = "ใส่ token ด้านล่างก่อนกดปล่อยจริง"; return; }
+    if (moving) { drawBtn.disabled = true; drawBtn.textContent = testing ? "กำลังทดลอง…" : "กำลังปล่อย…"; setTimeout(refreshOwner, 1000); return; }
+    drawBtn.disabled = false;
+    if (!REAL) drawBtn.textContent = "ปล่อยลูกบอล — จับรอบที่ 1";
+    else if (nowS() < armedUntil) { drawBtn.className = "act confirm"; drawBtn.textContent = "ยืนยัน จับรอบที่ " + nextN; }
+    else drawBtn.textContent = "เริ่มรอบใหม่ (รอบที่ " + nextN + ")";
+  }
+  function randInt(n) { const max = Math.floor(0x100000000 / n) * n, b = new Uint32Array(1); do { crypto.getRandomValues(b); } while (b[0] >= max); return b[0] % n; }
+  function shuffle(arr) { const x = arr.slice(); for (let i = x.length - 1; i > 0; i--) { const j = randInt(i + 1); [x[i], x[j]] = [x[j], x[i]]; } return x; }
+  function makeRound(now, lead) {
+    const slotsShuffled = shuffle([...Array(B).keys()]);       // ball b starts in slot slotsShuffled[b]
+    const seed = randInt(0x7fffffff);
+    const sim = simulate(slotsShuffled, seed);
+    return { n: (REAL ? REAL.n : 0) + 1, drawnAt: new Date(now).toISOString(), revealAt: now + (lead == null ? LEAD_MS : lead),
+      order: sim.order.map(b => ROSTER[b]), race: { start: slotsShuffled, seed, exitT: sim.exitT, frames: sim.frames } };
+  }
+  const b64e = s => { const u = new TextEncoder().encode(s); let bin = ""; for (let i = 0; i < u.length; i += 0x8000) bin += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(bin); };
+  const b64d = s => { const bin = atob(s.replace(/\s/g, "")), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); };
+  function ghError(code) {
+    if (code === 401) return "token ไม่ถูกต้องหรือหมดอายุ สร้างใหม่แล้วใส่อีกครั้ง";
+    if (code === 403 || code === 404) return "token นี้ไม่มีสิทธิ์เขียน repo bullrock-group (ตอนสร้างต้องเลือก repo นี้ และให้สิทธิ์ Contents: Read and write)";
+    if (code === 409 || code === 422) return "มีการบันทึกพร้อมกันจากที่อื่น รอสักครู่แล้วกดใหม่";
+    return "GitHub ตอบกลับผิดปกติ (" + code + ") ยังไม่มีใครเห็นผลรอบนี้ ลองใหม่อีกครั้ง";
+  }
+  async function onDraw() {
+    if (busy || !getToken()) return;
+    if (REAL && nowS() >= armedUntil) {
+      armedUntil = nowS() + 6000; status("warn", "กดปุ่มสีส้มอีกครั้งภายใน 6 วินาทีเพื่อยืนยัน รอบเดิมจะยังอยู่ในประวัติให้ทุกคนเห็น");
+      refreshOwner(); setTimeout(refreshOwner, 6100); return;
+    }
+    busy = true; refreshOwner(); status("", "กำลังอ่านข้อมูลล่าสุดจาก GitHub…");
+    const url = "https://api.github.com/repos/" + REPO + "/contents/" + PATH, headers = { Authorization: "Bearer " + getToken(), Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
+    let latest, sha;
+    try {
+      const r = await fetch(url + "?ref=" + BRANCH + "&t=" + Date.now(), { headers, cache: "no-store" });
+      if (!r.ok) { busy = false; status("bad", ghError(r.status)); refreshOwner(); return; }
+      const j = await r.json(); sha = j.sha; latest = JSON.parse(b64d(j.content));
+    } catch (e) { busy = false; status("bad", "ติดต่อ GitHub ไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่"); refreshOwner(); return; }
+    const lastN = latest.rounds.length ? latest.rounds[latest.rounds.length - 1].n : 0;
+    if (lastN !== (REAL ? REAL.n : 0)) { busy = false; applyState(latest); status("warn", "บน GitHub มีรอบที่ " + lastN + " ที่หน้านี้ยังไม่เห็น โหลดให้แล้ว ตรวจดูก่อนกดอีกครั้ง"); return; }
+    status("", "กำลังสุ่มและบันทึก…");
+    const round = makeRound(nowS(), LEAD_MS);
+    const next = { roster: latest.roster, rounds: latest.rounds.map(r => ({ n: r.n, drawnAt: r.drawnAt, order: r.order })).concat([round]) };   // old replays dropped to keep the file small
+    try {
+      const r = await fetch(url, { method: "PUT", headers, body: JSON.stringify({ message: "ANTA: จับลำดับรอบที่ " + round.n, content: b64e(JSON.stringify(next)), sha, branch: BRANCH }) });
+      busy = false;
+      if (!r.ok) { status("bad", ghError(r.status)); refreshOwner(); return; }
+    } catch (e) { busy = false; status("warn", "ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วดูว่ารอบที่ " + round.n + " ขึ้นในประวัติหรือยัง ก่อนกดใหม่"); refreshOwner(); return; }
+    pendingN = round.n; applyState(next);
+    status("", "บันทึกแล้ว · กำลังรอเว็บอัปเดตให้ทุกเครื่อง (ประมาณ 1 นาที) นับถอยหลังเผื่อไว้ 2 นาทีครึ่ง");
+  }
+  async function onCopy() {
+    if (!REAL) return;
+    const text = "ANTA รอบที่ " + REAL.n + " · จับเมื่อ " + fmt(REAL.drawnAt) + "\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n");
+    try { await navigator.clipboard.writeText(text); status("ok", "คัดลอกแล้ว เปิดหน้า \"ส่งผลเข้า Sheet\" แล้ววาง"); }
+    catch (e) { copyArea.value = text; copyArea.hidden = false; copyArea.focus(); copyArea.select(); status("", "เลือกข้อความไว้แล้ว กดคัดลอกเอง"); }
+  }
+  function play(round, isTest, scroll) {   // switch what this screen shows; nothing is saved
+    testing = isTest; current = round; race = round && round.race ? round.race : null;
+    setRanks(); buildSched(); resetSlots(); armedUntil = 0;
+    if (scroll) stage.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    refreshOwner(); tick();
+  }
+  function applyState(st) {
+    if (JSON.stringify(st.roster) !== JSON.stringify(ROSTER)) { location.reload(); return; }   // driver list changed
+    STATE = st; REAL = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
+    renderHistory();
+    if (!testing && !running) play(REAL, false, false);
+    else if (!testing) { current = REAL; race = REAL && REAL.race ? REAL.race : null; setRanks(); buildSched(); }
+    refreshOwner();
+  }
+  async function poll() {
+    try {
+      const st = await fetchState();
+      const a = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
+      if ((a && a.drawnAt) !== (REAL && REAL.drawnAt) || st.rounds.length !== STATE.rounds.length) applyState(st);
+      if (pendingN && a && a.n === pendingN) { pendingN = 0; status("ok", "เว็บอัปเดตแล้ว คนขับทุกเครื่องเห็นนับถอยหลังแล้ว"); }
+    } catch (e) { /* try again next round */ }
+  }
+  setInterval(poll, 5000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) poll(); });
+  testBtn.addEventListener("click", () => { status("", "โหมดทดลอง: ไม่บันทึก คนอื่นไม่เห็น"); play(makeRound(nowS(), 3000), true, true); });
+  backBtn.addEventListener("click", () => { status("", ""); play(REAL, false, true); });
+  drawBtn.addEventListener("click", onDraw);
+  copyBtn.addEventListener("click", onCopy);
+  saveTokenBtn.addEventListener("click", () => { const v = tokenInput.value.trim(); if (!v) return; try { localStorage.setItem(TOKEN_KEY, v); } catch (e) {} tokenInput.value = ""; showTokenState(); refreshOwner(); });
+  clearTokenBtn.addEventListener("click", () => { try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} showTokenState(); refreshOwner(); });
+  window.__antaSimulate = simulate;   // used only by tests
+
+  function showOwner() { owner.hidden = location.hash !== "#organiser"; showTokenState(); refreshOwner(); }
+  window.addEventListener("hashchange", showOwner);
+  showOwner();
+  tick();
+})();
+</script>
+</body>
+</html>
