@@ -18,11 +18,16 @@ git status --short
 echo [4/6] git commit...
 git commit -m "feat: add real fleet, warehouse, and staff photos across all pages"
 
-echo [5/6] git push to master...
-git push origin master
+echo [5/6] git pull latest from GitHub (keeps ANTA queue draws saved from the web)...
+git pull --rebase origin main
+if errorlevel 1 (
+  echo PULL FAILED - fix the conflict first. Nothing was pushed.
+  pause
+  exit /b 1
+)
 
-echo [6/6] git push master to main...
-git push origin master:main --force
+echo [6/6] git push to main (no --force, so web-saved files are never overwritten)...
+git push origin master:main
 
 echo.
 echo ===== FINISHED =====
