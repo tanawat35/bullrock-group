@@ -45,7 +45,7 @@ h2 { font-family: var(--display); font-size: 18px; margin: 0; }
 .sub { color: var(--muted); margin: 0; max-width: 60ch; }
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
 .stage { justify-items: center; text-align: center; padding: 14px 12px 18px; }
-.boardBox { width: min(400px, 100%); max-width: 100%; aspect-ratio: 360 / 672; border-radius: 12px; overflow: hidden; background: var(--board); }
+.boardBox { width: min(400px, 100%); max-width: 100%; aspect-ratio: 360 / 752; border-radius: 12px; overflow: hidden; background: var(--board); }
 .boardBox canvas { width: 100%; height: 100%; display: block; }
 .say { font-family: var(--display); font-size: 22px; font-weight: 700; margin: 0; min-height: 1.3em; text-wrap: balance; }
 .say .pos { display: inline-block; min-width: 1.6em; padding: 0 .35em; margin-right: .3em; border-radius: 99px; background: var(--ball); color: var(--ball-ink); font-family: var(--mono); }
@@ -88,67 +88,106 @@ textarea { width: 100%; font: 13px var(--mono); }
 @media (prefers-reduced-motion: reduce) { .slot.filled.fresh { animation: none; } }
 .tokenRow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .tokenRow input { flex: 1 1 220px; min-width: 0; font: 14px var(--mono); padding: 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.rosterList { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.rosterList li { display: inline-flex; align-items: center; gap: 2px; padding: 3px 3px 3px 10px; border: 1px solid var(--line); border-radius: 99px; font-size: 14px; }
+.rosterList li.added { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+.rosterList button { border: 0; background: transparent; color: var(--muted); font-size: 17px; line-height: 1; cursor: pointer; padding: 2px 7px; border-radius: 99px; }
+.rosterList button:hover { color: var(--bad); }
 .loading { padding: 40px 16px; text-align: center; color: var(--muted); font-family: var(--body); }
 </style>
 </head>
 <body>
 <div id="app"><p class="loading">กำลังโหลด…</p></div>
-<script id="state" type="application/json">{"roster":["มีนา เรืองศิริ","ธนวัฒน์ หอมชื่น","ภาณุวัฒน์ ครึ้มค้างพลู","สัญชัย ศรีอินทร์จันทร์","ธนูเดช เชื้อวงษ์","พีระยุทธ์ คำดี","เลอสรรค์ โคขุนทด","สมบูรณ์ เครือยิหวา","อัครินทร์ กุลศิริธนวัฒน์","ชาญวิทย์ ภู่พงษ์สิน","ศุภสิทธิ์ จันทร์สิน","วัลลภ บุตรดี","บุญมาก ปริธรรมมา","อาสือมั่น ตาเฮ","วันเฉลิม มงคลบุตร","แสงทอง ด่านระหาร","ปุณณวิช แสงใส"],"rounds":[]}</script>
+<script id="state" type="application/json">{"roster":["มีนา เรืองศิริ","ธนวัฒน์ หอมชื่น","ภาณุวัฒน์ ครึ้มค้างพลู","สัญชัย ศรีอินทร์จันทร์","ธนูเดช เชื้อวงษ์","เลอสรรค์ โคขุนทด","สมบูรณ์ เครือยิหวา","อัครินทร์ กุลศิริธนวัฒน์","ชาญวิทย์ ภู่พงษ์สิน","ศุภสิทธิ์ จันทร์สิน","วัลลภ บุตรดี","บุญมาก ปริธรรมมา","อาสือมั่น ตาเฮ","วันเฉลิม มงคลบุตร","แสงทอง ด่านระหาร","ปุณณวิช แสงใส"],"rounds":[]}</script>
 <script id="app-js">
 (async function () {
   "use strict";
   const SENDER_URL = "https://claude.ai/artifact/KNPkVGp6xKN3qu3GtH6ZNF";
-  const LEAD_MS = 150000;  // countdown before the gate opens: GitHub needs ~1 minute to publish the new round to every phone
+  const LEAD_MS = 150000;  // countdown before the drum starts: GitHub needs ~1 minute to publish the new round to every phone
 
-  // ================= board geometry (world units, 360 × 672) =================
-  const W = 360, H = 672, R = 8.5, PR = 3.5, TAU = Math.PI * 2;
-  const FY0 = 352, FY1 = 480, EX = 11.5, FIN = 505;             // funnel top/bottom, half exit width (one ball at a time), finish line
-  const BELT_Y = 566, X0 = 11.5, BELT_V = 150;                  // conveyor top, ball start x on belt, belt speed px/s
-  const GX0 = W / 2, GY0 = FIN + 6, GX1 = X0 + 4, GY1 = 530;      // single-file gutter from the exit, ending above the belt's left end (ball-centre path)
-  const CUP_TOP = 592, CUP_BOT = 640, CUP_REST = CUP_BOT - R - 2;
-  const G = 980;
-  const PEGS = [];
-  for (let row = 0; row < 10; row++) { const y = 60 + row * 30; const off = row % 2 ? 18 : 0; for (let x = 18 + off; x <= 342; x += 36) if (x > 2 * R + PR + 8 && x < W - (2 * R + PR + 8)) PEGS.push([x, y]); }   // no peg so close to a wall that a ball could wedge
-  const SEGS = [[0, 0, 0, FY0], [W, 0, W, FY0], [0, FY0, W / 2 - EX, FY1], [W, FY0, W / 2 + EX, FY1], [W / 2 - EX, FY1, W / 2 - EX, FIN - 2], [W / 2 + EX, FY1, W / 2 + EX, FIN - 2]];
-  const LEDGES = [];   // angled wall bumpers so no ball can free-fall down a wall
-  for (let row = 0; row < 10; row += 2) { const y = 60 + row * 30; LEDGES.push([0, y - 12, 15, y + 1], [W, y - 12, W - 15, y + 1]); }
-  LEDGES.forEach(l => SEGS.push(l));
-  const startX = (s, B) => 22 + s * (316 / Math.max(B - 1, 1));
-  const START_Y = 18;
-  const holeX = k => (k + 0.5) * (W / 17);
+  // ================= board geometry (world units, 360 × 752) =================
+  // drum (stage 1: mix) → pegs → funnel (one ball out at a time) → gutter → conveyor → cups
+  const W = 360, H = 752, PR = 3.5, TAU = Math.PI * 2, G = 980;
+  const DCX = W / 2, DCY = 92, DR = 74, PADDLE = 24, NPADDLE = 4;   // mixing drum with paddles
+  let MIX_MS = 5000, SPIN_W = 2.0, SPIN_UP = 0.6, REV_AT = 2.5;      // drum spins for MIX_MS (reversing at REV_AT s if set), then splits open and drops every ball at once
+  const PEG_Y0 = 196, PEG_ROWS = 8, PEG_DY = 30;
+  const FY0 = 432, FY1 = 560, FIN = 585;                            // funnel top/bottom, finish line under the exit
+  const BELT_Y = 646, BELT_V = 150, GY1 = 610;                      // conveyor top, belt speed px/s, gutter end height
+  const CUP_TOP = 672, CUP_BOT = 720;
+  const MAX_NAMES = 24;
+  let R, EX, X0, GX0, GY0, GX1, CUP_REST, NCUPS, PEGS, SEGS, LEDGES, DRUM_PTS;
+  const holeX = k => (k + 0.5) * (W / NCUPS);
+  // Ball size, exit width and cups follow the number of drivers, so every ball fits its cup.
+  function setupBoard(n) {
+    NCUPS = Math.max(n, 1);
+    R = Math.min(8.5, (W / NCUPS) / 2 - 1.6);
+    EX = R * 1.35; X0 = Math.max(holeX(0), R + 3);
+    GX0 = W / 2; GY0 = FIN + 6; GX1 = X0 + 4;
+    CUP_REST = CUP_BOT - R - 2;
+    PEGS = []; LEDGES = [];
+    for (let row = 0; row < PEG_ROWS; row++) {
+      const y = PEG_Y0 + row * PEG_DY, off = row % 2 ? 18 : 0;
+      for (let x = 18 + off; x <= 342; x += 36) if (x > 2 * R + PR + 8 && x < W - (2 * R + PR + 8)) PEGS.push([x, y]);   // no peg so close to a wall that a ball could wedge
+      if (row % 2 === 0) LEDGES.push([0, y - 12, 15, y + 1], [W, y - 12, W - 15, y + 1]);                                   // wall bumpers: no free fall down a wall
+    }
+    SEGS = [[0, 0, 0, FY0], [W, 0, W, FY0], [0, FY0, W / 2 - EX, FY1], [W, FY0, W / 2 + EX, FY1], [W / 2 - EX, FY1, W / 2 - EX, FIN - 2], [W / 2 + EX, FY1, W / 2 + EX, FIN - 2]].concat(LEDGES);
+    // resting spots inside the drum, bottom first; ball b starts on spot start[b]
+    const sp = 2 * R + 1.4, lim = DR - R - 2, pts = [];
+    for (let row = 0; ; row++) {
+      const y = DCY + lim - row * sp * 0.866; if (y < DCY - lim) break;
+      for (let x = DCX - lim + (row % 2) * sp / 2; x <= DCX + lim; x += sp) if (Math.hypot(x - DCX, y - DCY) <= lim) pts.push([x, y]);
+    }
+    DRUM_PTS = pts;
+  }
+  const fwdAngle = t => t < SPIN_UP ? SPIN_W * t * t / (2 * SPIN_UP) : SPIN_W * (t - SPIN_UP / 2);
+  const drumAngle = t => !REV_AT || t <= REV_AT ? fwdAngle(t) : 2 * fwdAngle(REV_AT) - fwdAngle(REV_AT + (t - REV_AT));   // t in seconds
+  const drumW = t => !REV_AT || t <= REV_AT ? SPIN_W * Math.min(1, t / SPIN_UP) : -SPIN_W * Math.min(1, (t - REV_AT) / SPIN_UP);
 
   function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
-  // Physics race: gravity, spin and rolling friction (solid spheres), speed-dependent bounce, ball-to-ball hits.
-  // start[b] = start slot of ball b. Returns finish order (ball ids), exit times (ms) and positions recorded
-  // at 30 fps as [x×2, y×2, angle×10] so every screen replays the identical race.
+  // Physics: gravity, spin and rolling friction (solid spheres), speed-dependent bounce, ball-to-ball hits,
+  // a spinning drum with paddles that mixes the balls before it opens. start[b] = drum spot of ball b.
+  // Returns finish order (ball ids), exit times (ms from the start of the spin) and positions recorded at
+  // 30 fps as [x×2, y×2, angle×10] so every screen replays the identical race.
   function simulate(start, seed) {
-    const B = start.length, rnd = mulberry32(seed), DT = 1 / 480, REC = 16, WMAX = 70;
+    const B = start.length, rnd = mulberry32(seed), DT = 1 / 480, REC = 16, WMAX = 70, VMAX = 900, T_OPEN = MIX_MS / 1000;
     const x = [], y = [], vx = [], vy = [], w = [], an = [], live = [];
-    for (let b = 0; b < B; b++) { x[b] = startX(start[b], B) + (rnd() - 0.5) * 3; y[b] = START_Y; vx[b] = (rnd() - 0.5) * 16; vy[b] = 0; w[b] = 0; an[b] = rnd() * TAU; live[b] = true; }
+    for (let b = 0; b < B; b++) { const p = DRUM_PTS[start[b]]; x[b] = p[0] + (rnd() - 0.5) * 0.6; y[b] = p[1]; vx[b] = 0; vy[b] = 0; w[b] = 0; an[b] = rnd() * TAU; live[b] = true; }
     const frames = [], exitT = new Array(B).fill(-1), order = [];
+    const ord = [...Array(B).keys()]; for (let i = B - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [ord[i], ord[j]] = [ord[j], ord[i]]; }   // collision order shuffled each round so no ball number is favoured
     const rec = () => { for (let b = 0; b < B; b++) frames.push(Math.round(x[b] * 2), Math.round(y[b] * 2), Math.round(an[b] * 10)); };
     rec();
-    function contact(b, px, py, rad, e0, mu) {
+    function resolve(b, nx, ny, svx, svy, e0, mu) {   // n points from the surface into the ball; s = surface velocity
+      const vn = (vx[b] - svx) * nx + (vy[b] - svy) * ny; let jn = 0;
+      if (vn < 0) { const e = -vn < 35 ? 0 : e0; jn = -(1 + e) * vn; vx[b] += jn * nx; vy[b] += jn * ny; }
+      const tx = -ny, ty = nx, slip = (vx[b] - svx) * tx + (vy[b] - svy) * ty - w[b] * R;   // contact-point slip
+      let J = -slip / 3.5; const cap = mu * jn; if (J > cap) J = cap; else if (J < -cap) J = -cap;
+      vx[b] += J * tx; vy[b] += J * ty; w[b] -= 2.5 * J / R;
+    }
+    function contact(b, px, py, rad, e0, mu, svx, svy) {
       const dx = x[b] - px, dy = y[b] - py, d2 = dx * dx + dy * dy, m = R + rad;
       if (d2 >= m * m || d2 === 0) return;
       const d = Math.sqrt(d2), nx = dx / d, ny = dy / d;
       x[b] = px + nx * m; y[b] = py + ny * m;
-      const vn = vx[b] * nx + vy[b] * ny; let jn = 0;
-      if (vn < 0) { const e = -vn < 35 ? 0 : e0; jn = -(1 + e) * vn; vx[b] += jn * nx; vy[b] += jn * ny; }
-      const tx = -ny, ty = nx, slip = vx[b] * tx + vy[b] * ty - w[b] * R;   // contact-point slip
-      let J = -slip / 3.5; const cap = mu * jn; if (J > cap) J = cap; else if (J < -cap) J = -cap;
-      vx[b] += J * tx; vy[b] += J * ty; w[b] -= 2.5 * J / R;
+      resolve(b, nx, ny, svx || 0, svy || 0, e0, mu);
     }
-    let t = 0, step = 0, alive = B, lastExit = 2, nextKick = 0, kicks = 0;
-    while (alive > 0 && t < 120) {
+    function segContact(b, ax, ay, bx, by, rad, e0, mu, wd) {   // wd: angular speed of a drum-mounted segment
+      const ex = bx - ax, ey = by - ay;
+      let u = ((x[b] - ax) * ex + (y[b] - ay) * ey) / (ex * ex + ey * ey); u = u < 0 ? 0 : u > 1 ? 1 : u;
+      const qx = ax + u * ex, qy = ay + u * ey;
+      contact(b, qx, qy, rad, e0, mu, wd ? -wd * (qy - DCY) : 0, wd ? wd * (qx - DCX) : 0);
+    }
+    let t = 0, step = 0, alive = B, lastExit = T_OPEN + 2, nextKick = 0;
+    while (alive > 0 && t < 150) {
+      const inDrum = t < T_OPEN, th = drumAngle(t), wd = drumW(t);
       for (let b = 0; b < B; b++) if (live[b]) {
         vy[b] += G * DT; vx[b] *= 0.9998; vy[b] *= 0.9998;
+        const sp = Math.sqrt(vx[b] * vx[b] + vy[b] * vy[b]); if (sp > VMAX) { vx[b] *= VMAX / sp; vy[b] *= VMAX / sp; }
         w[b] *= 0.9993; if (w[b] > WMAX) w[b] = WMAX; else if (w[b] < -WMAX) w[b] = -WMAX;
         x[b] += vx[b] * DT; y[b] += vy[b] * DT; an[b] += w[b] * DT;
       }
       for (let it = 0; it < 2; it++) {
-        for (let i = 0; i < B; i++) if (live[i]) for (let j = i + 1; j < B; j++) if (live[j]) {
+        for (let ii = 0; ii < B; ii++) { const i = ord[ii]; if (!live[i]) continue; for (let jj = ii + 1; jj < B; jj++) { const j = ord[jj]; if (!live[j]) continue;
           const dx = x[j] - x[i], dy = y[j] - y[i], d2 = dx * dx + dy * dy;
           if (d2 >= 4 * R * R || d2 === 0) continue;
           const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, ov = (2 * R - d) / 2;
@@ -161,21 +200,26 @@ textarea { width: 100%; font: 13px var(--mono); }
             let J = slip / 7; const cap = 0.1 * im; if (J > cap) J = cap; else if (J < -cap) J = -cap;
             vx[i] += J * tx; vy[i] += J * ty; vx[j] -= J * tx; vy[j] -= J * ty; w[i] -= 2.5 * J / R; w[j] -= 2.5 * J / R;
           }
-        }
+        } }
         for (let b = 0; b < B; b++) if (live[b]) {
-          if (y[b] < FY0) for (let p = 0; p < PEGS.length; p++) { const P = PEGS[p]; if (Math.abs(P[1] - y[b]) < 13) contact(b, P[0], P[1], PR, 0.55, 0.25); }
-          for (let s = 0; s < SEGS.length; s++) {
-            const S = SEGS[s], ax = S[0], ay = S[1], ex = S[2] - ax, ey = S[3] - ay;
-            let u = ((x[b] - ax) * ex + (y[b] - ay) * ey) / (ex * ex + ey * ey); u = u < 0 ? 0 : u > 1 ? 1 : u;
-            contact(b, ax + u * ex, ay + u * ey, 2, 0.35, 0.4);
+          if (inDrum) {
+            const dx = x[b] - DCX, dy = y[b] - DCY, d = Math.sqrt(dx * dx + dy * dy), L = DR - R - 1.5;
+            if (d > L) { const ux = dx / d, uy = dy / d; x[b] = DCX + ux * L; y[b] = DCY + uy * L; resolve(b, -ux, -uy, -wd * uy * DR, wd * ux * DR, 0.3, 0.5); }
+            for (let k = 0; k < NPADDLE; k++) {
+              const a = th + k * TAU / NPADDLE, ca = Math.cos(a), sa = Math.sin(a);
+              segContact(b, DCX + ca * DR, DCY + sa * DR, DCX + ca * (DR - PADDLE), DCY + sa * (DR - PADDLE), 2, 0.3, 0.5, wd);
+            }
+            continue;
           }
+          if (y[b] < FY0) for (let p = 0; p < PEGS.length; p++) { const P = PEGS[p]; if (Math.abs(P[1] - y[b]) < 13) contact(b, P[0], P[1], PR, 0.55, 0.25); }
+          for (let s = 0; s < SEGS.length; s++) { const S = SEGS[s]; segContact(b, S[0], S[1], S[2], S[3], 2, 0.35, 0.4, 0); }
           if (y[b] < R) { y[b] = R; vy[b] = Math.abs(vy[b]) * 0.3; }
         }
       }
       t += DT; step++;
       for (let b = 0; b < B; b++) if (live[b] && y[b] > FIN) { live[b] = false; alive--; exitT[b] = Math.round(t * 1000); order.push(b); lastExit = t; }
       if (t - lastExit > 3 && t >= nextKick) {   // shake the board only if a ball is truly stuck
-        for (let b = 0; b < B; b++) if (live[b] && vx[b] * vx[b] + vy[b] * vy[b] < 900) { vx[b] += (rnd() - 0.5) * 120; vy[b] -= rnd() * 140; kicks++; }
+        for (let b = 0; b < B; b++) if (live[b] && vx[b] * vx[b] + vy[b] * vy[b] < 900) { vx[b] += (rnd() - 0.5) * 120; vy[b] -= rnd() * 140; }
         nextKick = t + 0.35;
       }
       if (step % REC === 0) rec();
@@ -185,7 +229,7 @@ textarea { width: 100%; font: 13px var(--mono); }
       rest.sort((a, c) => y[c] - y[a]).forEach((b, i) => { exitT[b] = Math.round(t * 1000) + i * 300; order.push(b); });
     }
     rec();
-    return { order, exitT, frames, kicks };
+    return { order, exitT, frames };
   }
 
   // ================= state =================
@@ -205,10 +249,15 @@ textarea { width: 100%; font: 13px var(--mono); }
   document.getElementById("app").textContent = "";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ROSTER = STATE.roster, B = ROSTER.length;
+  setupBoard(B);
+  const sameNames = (a, b) => a.length === b.length && a.slice().sort().join("\n") === b.slice().sort().join("\n");
+  const replayOf = r => r && r.race && r.race.v === 2 && sameNames(r.order, ROSTER) ? r.race : null;   // only replays recorded on this board with this list
   let REAL = STATE.rounds.length ? STATE.rounds[STATE.rounds.length - 1] : null;   // the saved round everyone sees
-  let current = REAL, race = REAL && REAL.race ? REAL.race : null, testing = false;     // what this screen is playing
+  let current = REAL, race = replayOf(REAL), testing = false;                        // what this screen is playing
+  const isStale = r => !!(r && !sameNames(r.order, ROSTER));                         // list changed since that round was drawn
   const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const ballColor = b => "hsl(" + Math.round(((b * 7) % 17) * 360 / 17) + " 78% 62%)";
+  const hue = b => Math.round((b * 137.508) % 360);                                   // well-spread colours for any number of balls
+  const ballColor = b => "hsl(" + hue(b) + " 78% 62%)";
   const rankOf = new Array(B).fill(-1);
   function setRanks() { rankOf.fill(-1); if (current) current.order.forEach((n, k) => { const b = ROSTER.indexOf(n); if (b >= 0) rankOf[b] = k; }); }
   setRanks();
@@ -222,7 +271,7 @@ textarea { width: 100%; font: 13px var(--mono); }
   const wrap = el("div", "wrap"); app.append(wrap);
   const header = el("header");
   header.append(el("span", "eyebrow", "BULLROCK EXPRESS · ANTA · รถ 4W"), el("h1", null, "ปล่อยลูกบอลจับลำดับคิว"),
-    el("p", "sub", "ลูกบอล 17 ลูก ลูกละคน เริ่มจากช่องที่สุ่มให้ ปล่อยพร้อมกัน เด้งผ่านหมุดลงกรวย ลูกไหนหลุดออกจากกรวยก่อนได้ลำดับก่อน แล้วสายพานพาไปลงหลุมตามลำดับ 1 ถึง 17"));
+    el("p", "sub", "ด่าน 1: ลูกบอล " + ROSTER.length + " ลูก ลูกละคน หมุนคละกันในวงล้อ แล้วปล่อยลงพร้อมกันทีเดียว · ด่าน 2: เด้งผ่านหมุดลงกรวย ลูกไหนหลุดออกจากกรวยก่อนได้ลำดับก่อน แล้วสายพานพาไปลงหลุม 1 ถึง " + ROSTER.length));
   wrap.append(header);
 
   const stage = el("section", "panel stage"); stage.setAttribute("aria-live", "polite");
@@ -245,9 +294,15 @@ textarea { width: 100%; font: 13px var(--mono); }
     legend.append(c); return c;
   });
 
-  const slots = el("ol", "slots"); const slotEls = [];
-  for (let i = 0; i < B; i++) { const li = el("li", "slot"); li.append(el("span", "num", String(i + 1)), el("span", "name", "รอจับ")); slots.append(li); slotEls.push(li); }
-  wrap.append(slots);
+  const staleNote = el("p", "hint"); staleNote.hidden = true;
+  const slots = el("ol", "slots"); let slotEls = [];
+  function buildSlots(n) {
+    if (slotEls.length === n) return;
+    slots.textContent = ""; slotEls = [];
+    for (let i = 0; i < n; i++) { const li = el("li", "slot"); li.append(el("span", "num", String(i + 1)), el("span", "name", "รอจับ")); slots.append(li); slotEls.push(li); }
+  }
+  buildSlots(current ? current.order.length : B);
+  wrap.append(staleNote, slots);
 
   const histBox = el("section", "panel"); histBox.append(el("h2", null, "ประวัติการจับ"));
   const hist = el("ul", "hist");
@@ -271,7 +326,19 @@ textarea { width: 100%; font: 13px var(--mono); }
   const clearTokenBtn = el("button", "act ghost", "ลบ token จากเครื่องนี้"); clearTokenBtn.type = "button"; clearTokenBtn.id = "clearTokenBtn";
   tokenRow.append(tokenInput, saveTokenBtn, clearTokenBtn);
   const tokenState = el("p", "hint");
-  owner.append(ownerBtns, ownerStatus, senderP, copyArea, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
+  const rosterH = el("h2");
+  const rosterHint = el("p", "hint", "เพิ่มหรือลบชื่อ แล้วกด \"บันทึกรายชื่อขึ้นเว็บ\" ลูกบอลและหลุมจะเพิ่มหรือลดตามจำนวนคนเอง (2–" + MAX_NAMES + " คน) ประวัติการจับเดิมไม่เปลี่ยน");
+  const rosterList = el("ul", "rosterList");
+  const addRow = el("div", "tokenRow");
+  const newName = el("input"); newName.id = "newName"; newName.type = "text"; newName.placeholder = "ชื่อ นามสกุล คนขับที่จะเพิ่ม"; newName.maxLength = 40;
+  const addBtn = el("button", "act ghost", "เพิ่มชื่อ"); addBtn.type = "button"; addBtn.id = "addNameBtn";
+  addRow.append(newName, addBtn);
+  const rosterBtns = el("div", "btns");
+  const saveRosterBtn = el("button", "act", "บันทึกรายชื่อขึ้นเว็บ"); saveRosterBtn.type = "button"; saveRosterBtn.id = "saveRosterBtn";
+  const resetRosterBtn = el("button", "act ghost", "ยกเลิกการแก้"); resetRosterBtn.type = "button"; resetRosterBtn.id = "resetRosterBtn";
+  rosterBtns.append(saveRosterBtn, resetRosterBtn);
+  const rosterStatus = el("p", "status"); rosterStatus.id = "rosterStatus";
+  owner.append(ownerBtns, ownerStatus, senderP, copyArea, rosterH, rosterHint, rosterList, addRow, rosterBtns, rosterStatus, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
 
   function renderHistory() {
     hist.textContent = "";
@@ -324,7 +391,10 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
   buildSched();
   function ballAt(b, e) {
-    if (!race) return current && rankOf[b] >= 0 ? { x: holeX(rankOf[b]), y: CUP_REST, a: 0 } : { x: startX(b, B), y: START_Y, a: b };   // rounds without a replay show the result in the cups
+    if (!race) {   // no replay: show a finished round in the cups, otherwise the balls waiting in the drum
+      if (current && !testing && !isStale(current) && rankOf[b] >= 0) return { x: holeX(rankOf[b]), y: CUP_REST, a: 0 };
+      const p = DRUM_PTS[b % DRUM_PTS.length]; return { x: p[0], y: p[1], a: b };
+    }
     if (e <= race.exitT[b]) return simPos(b, e);
     const s = sched[rankOf[b]], p = s.p;
     if (e < s.g0) {   // falling out of the chute, or waiting in line for the gutter
@@ -348,13 +418,11 @@ textarea { width: 100%; font: 13px var(--mono); }
     const w = Math.max(1, Math.round(r.width * d)), h = Math.round(w * H / W);
     if (canvas.width !== w || canvas.height !== h || !staticLayer) { canvas.width = w; canvas.height = h; scale = w / W; buildStatic(); }
   }
-  const hue = b => Math.round(((b * 7) % 17) * 360 / 17);
   function buildStatic() {
     staticLayer = document.createElement("canvas"); staticLayer.width = canvas.width; staticLayer.height = canvas.height;
     const g = staticLayer.getContext("2d"); g.setTransform(scale, 0, 0, scale, 0, 0);
     const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#2d1a4d"); bg.addColorStop(0.75, "#1a0d2b"); bg.addColorStop(1, "#12081f");
     g.fillStyle = bg; g.fillRect(0, 0, W, H);
-    g.fillStyle = "rgba(255,255,255,0.05)"; g.fillRect(6, 6, W - 12, 26);
     for (const P of PEGS) {
       const pg = g.createRadialGradient(P[0] - 1.2, P[1] - 1.2, 0.3, P[0], P[1], PR + 0.5);
       pg.addColorStop(0, "#fff7dc"); pg.addColorStop(0.5, "#f0c95e"); pg.addColorStop(1, "#9c7420");
@@ -374,8 +442,8 @@ textarea { width: 100%; font: 13px var(--mono); }
     g.beginPath(); g.moveTo(GX0 + 14 + ox, GY0 + oy); g.lineTo(GX1 - 4 + ox, GY1 + oy); g.stroke();
     g.fillStyle = "rgba(255,255,255,0.8)"; g.font = "600 10px " + fonts.body; g.textAlign = "left"; g.fillText("ทางออก", W / 2 + EX + 6, FIN - 6);
     // cups
-    const cw = W / 17;
-    for (let k = 0; k < 17; k++) {
+    const cw = W / NCUPS;
+    for (let k = 0; k < NCUPS; k++) {
       const x0 = k * cw + 2, x1 = (k + 1) * cw - 2;
       g.fillStyle = "#0d0616"; g.beginPath(); g.moveTo(x0, CUP_TOP); g.lineTo(x0, CUP_BOT - 6); g.quadraticCurveTo(x0, CUP_BOT, x0 + 6, CUP_BOT); g.lineTo(x1 - 6, CUP_BOT); g.quadraticCurveTo(x1, CUP_BOT, x1, CUP_BOT - 6); g.lineTo(x1, CUP_TOP); g.closePath(); g.fill();
       g.strokeStyle = "#c9952a"; g.lineWidth = 1.5; g.stroke();
@@ -400,6 +468,28 @@ textarea { width: 100%; font: 13px var(--mono); }
     }
     ctx.fillStyle = "#5b677a"; ctx.beginPath(); ctx.arc(4, y0 + hgt / 2, 5, 0, TAU); ctx.arc(W - 4, y0 + hgt / 2, 5, 0, TAU); ctx.fill();
   }
+  function drawDrum(e, front) {   // stage 1: glass drum with paddles; splits open at MIX_MS
+    const o = e - MIX_MS; if (o > 700) return;
+    const spinning = e > 0 && o < 0, th = e > 0 ? drumAngle(Math.min(e, MIX_MS) / 1000) : 0;
+    const u = o > 0 ? o / 700 : 0, shift = u * u * 130, alpha = 1 - u;
+    ctx.save(); ctx.globalAlpha = alpha;
+    for (const side of [-1, 1]) {
+      ctx.save(); ctx.translate(side * shift, 0);
+      ctx.beginPath(); ctx.arc(DCX, DCY, DR, side < 0 ? Math.PI / 2 : -Math.PI / 2, side < 0 ? Math.PI * 1.5 : Math.PI / 2);
+      if (!front) { ctx.lineTo(DCX, DCY - DR); ctx.fillStyle = "rgba(255,255,255,0.06)"; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = "#e2b53e"; ctx.stroke(); }
+      else { ctx.lineWidth = 5; ctx.strokeStyle = "rgba(226,181,62,0.9)"; ctx.stroke(); }
+      ctx.restore();
+    }
+    if (!front && o < 0) {   // paddles and hub turn with the drum
+      ctx.strokeStyle = "#c9952a"; ctx.lineWidth = 4; ctx.lineCap = "round";
+      for (let k = 0; k < NPADDLE; k++) { const a = th + k * TAU / NPADDLE, ca = Math.cos(a), sa = Math.sin(a); ctx.beginPath(); ctx.moveTo(DCX + ca * (DR - 2), DCY + sa * (DR - 2)); ctx.lineTo(DCX + ca * (DR - PADDLE), DCY + sa * (DR - PADDLE)); ctx.stroke(); }
+    }
+    if (front) {   // glass shine over the balls
+      ctx.beginPath(); ctx.arc(DCX, DCY, DR - 9, -2.6, -1.4); ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.lineWidth = 4; ctx.stroke();
+      if (spinning) { ctx.fillStyle = "rgba(255,255,255,0.85)"; ctx.font = "600 11px " + fonts.body; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("กำลังคละลูก…", DCX, DCY + DR + 14); }
+    }
+    ctx.restore();
+  }
   function drawBall(p, b, big) {
     const r = big ? R + 1.2 : R, h = hue(b);
     ctx.beginPath(); ctx.ellipse(p.x + 1.5, p.y + 2.5, r, r * 0.9, 0, 0, TAU); ctx.fillStyle = "rgba(0,0,0,0.28)"; ctx.fill();
@@ -423,16 +513,18 @@ textarea { width: 100%; font: 13px var(--mono); }
     fit(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(staticLayer, 0, 0); ctx.setTransform(scale, 0, 0, scale, 0, 0);
     let e = current && race ? now - current.revealAt : -1;
     if (current && race && reduced && e > 0 && e < END_MS) e = END_MS;
-    drawBelt(e, e > 0 && e < END_MS);
-    if (e <= 0) { ctx.fillStyle = "#e2b53e"; ctx.fillRect(6, 30, W - 12, 3); }   // gate
+    drawBelt(e, e > MIX_MS && e < END_MS);
+    const de = race ? e : -1;
+    drawDrum(de, false);
     const list = []; for (let b = 0; b < B; b++) if (b !== mine) list.push(b); if (mine >= 0) list.push(mine);
     let minePos = null;
     for (const b of list) { const p = ballAt(b, e); drawBall(p, b, b === mine); if (b === mine) minePos = p; }
+    drawDrum(de, true);
     if (minePos) label(minePos, first(ROSTER[mine]) + (current && race && rankOf[mine] >= 0 && e >= sched[rankOf[mine]].inCup ? " · ลำดับ " + (rankOf[mine] + 1) : ""));
     if (current && race && e < 0) {
       const s = Math.ceil(-e / 1000);
-      ctx.fillStyle = "rgba(8,14,26,0.72)"; ctx.beginPath(); ctx.arc(W / 2, 200, 52, 0, TAU); ctx.fill();
-      ctx.fillStyle = "#ffffff"; ctx.font = "700 46px " + fonts.mono; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(s), W / 2, 202);
+      ctx.fillStyle = "rgba(8,14,26,0.72)"; ctx.beginPath(); ctx.arc(W / 2, 300, 52, 0, TAU); ctx.fill();
+      ctx.fillStyle = "#ffffff"; ctx.font = "700 46px " + fonts.mono; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(s), W / 2, 302);
     }
     return e;
   }
@@ -454,7 +546,7 @@ textarea { width: 100%; font: 13px var(--mono); }
     if (p === "idle") { running = false; setSay(0, "", "รอผู้จัดคิวกดปล่อยลูกบอล"); hint.textContent = "เปิดหน้านี้ค้างไว้ได้เลย เมื่อผู้จัดคิวกด หน้านี้จะขึ้นนับถอยหลังเองภายในราว 1 นาที ไม่ต้องรีเฟรช"; return; }
     if (p === "countdown") {
       running = true; setSay(0, "", tag() + " · ปล่อยลูกใน " + Math.ceil(-e / 1000) + " วินาที");
-      hint.textContent = testing ? "โหมดทดลอง: เห็นแค่เครื่องนี้ ไม่บันทึก ไม่นับเป็นรอบ" : "ลูกบอลทุกลูกอยู่ในช่องเริ่มที่สุ่มไว้แล้ว ผลการแข่งคำนวณครั้งเดียวตอนผู้จัดคิวกด (" + fmt(current.drawnAt) + ") ทุกเครื่องจะเห็นภาพเดียวกัน";
+      hint.textContent = testing ? "โหมดทดลอง: เห็นแค่เครื่องนี้ ไม่บันทึก ไม่นับเป็นรอบ" : "นับถึง 0 วงล้อจะหมุนคละลูก แล้วเปิดปล่อยทุกลูกลงพร้อมกัน ผลคำนวณครั้งเดียวตอนผู้จัดคิวกด (" + fmt(current.drawnAt) + ") ทุกเครื่องเห็นภาพเดียวกัน";
       return requestAnimationFrame(tick);
     }
     if (p === "running") {
@@ -463,12 +555,13 @@ textarea { width: 100%; font: 13px var(--mono); }
       let k = 0; while (k < sched.length && sched[k].inCup <= e) k++;
       fillTo(k, true);
       if (k > 0) setSay(k, current.order[k - 1]);
-      else setSay(0, "", out ? "ลูกแรกหลุดแล้ว กำลังไหลไปที่สายพาน…" : "ปล่อยแล้ว! ลูกบอลกำลังลง…");
-      hint.textContent = "หลุดจากกรวยแล้ว " + out + " ลูก · ลงหลุมแล้ว " + k + " จาก " + B + " · " + (testing ? "โหมดทดลอง ไม่บันทึก" : "รอบที่ " + current.n);
+      else setSay(0, "", e < MIX_MS ? "กำลังหมุนวงล้อคละลูก…" : out ? "ลูกแรกหลุดแล้ว กำลังไหลไปที่สายพาน…" : "เปิดวงล้อแล้ว! ลูกบอลกำลังลง…");
+      hint.textContent = (e < MIX_MS ? "ด่าน 1: คละลูกในวงล้อ" : "หลุดจากกรวยแล้ว " + out + " ลูก · ลงหลุมแล้ว " + k + " จาก " + current.order.length) + " · " + (testing ? "โหมดทดลอง ไม่บันทึก" : "รอบที่ " + current.n);
       return requestAnimationFrame(tick);
     }
-    running = false; const late = filled === 0; fillTo(B, !late);
-    if (testing) { setSay(0, "", "ทดลองเสร็จ · ลำดับ 1: " + current.order[0]); hint.textContent = "ผลทดลองไม่ถูกบันทึกและไม่มีใครเห็น กด \"กลับไปดูผลจริง\" เพื่อกลับ"; }
+    running = false; const late = filled === 0; fillTo(slotEls.length, !late);
+    if (!testing && isStale(current)) { setSay(0, "", "รอจับรอบใหม่ด้วยรายชื่อใหม่"); hint.textContent = "รายชื่อคนขับเปลี่ยนหลังรอบที่ " + current.n + " ลำดับด้านล่างยังเป็นของรอบที่ " + current.n + " จนกว่าผู้จัดคิวจะจับรอบใหม่"; }
+    else if (testing) { setSay(0, "", "ทดลองเสร็จ · ลำดับ 1: " + current.order[0]); hint.textContent = "ผลทดลองไม่ถูกบันทึกและไม่มีใครเห็น กด \"กลับไปดูผลจริง\" เพื่อกลับ"; }
     else { setSay(0, "", "ลำดับรอบที่ " + current.n + " · ลำดับ 1: " + current.order[0]); hint.textContent = "จับเมื่อ " + fmt(current.drawnAt) + " · ลำดับนี้ใช้รันงานจนกว่าจะเริ่มรอบใหม่"; }
     refreshOwner();
   }
@@ -482,8 +575,35 @@ textarea { width: 100%; font: 13px var(--mono); }
   function status(cls, text) { ownerStatus.className = "status" + (cls ? " " + cls : ""); ownerStatus.textContent = text; }
   function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
   function showTokenState() { tokenState.textContent = getToken() ? "เครื่องนี้มี token แล้ว กดปล่อยจริงได้" : "ยังไม่มี token บนเครื่องนี้ ใส่ token ที่สร้างจาก GitHub (สิทธิ์เขียนเฉพาะ repo bullrock-group) เพื่อให้ปุ่มปล่อยจริงบันทึกผลได้"; }
+  let draft = ROSTER.slice(), pendingRoster = false;
+  const normName = v => v.replace(/\s+/g, " ").trim();
+  const rosterDirty = () => JSON.stringify(draft) !== JSON.stringify(ROSTER);
+  function renderRoster(msg, cls) {
+    rosterH.textContent = "รายชื่อคนขับ (" + draft.length + " คน)";
+    rosterList.textContent = "";
+    draft.forEach((n, i) => {
+      const li = el("li", ROSTER.includes(n) ? "" : "added"); li.append(n);
+      const x = el("button", null, "×"); x.type = "button"; x.setAttribute("aria-label", "ลบ " + n);
+      x.addEventListener("click", () => { draft.splice(i, 1); renderRoster(); refreshOwner(); });
+      li.append(x); rosterList.append(li);
+    });
+    saveRosterBtn.disabled = busy || pendingRoster || !rosterDirty() || !getToken() || draft.length < 2 || draft.length > MAX_NAMES;
+    resetRosterBtn.disabled = !rosterDirty() || pendingRoster;
+    if (msg != null) { rosterStatus.className = "status" + (cls ? " " + cls : ""); rosterStatus.textContent = msg; return; }
+    if (pendingRoster) return;
+    const added = draft.filter(n => !ROSTER.includes(n)), removed = ROSTER.filter(n => !draft.includes(n));
+    rosterStatus.className = "status" + (rosterDirty() ? " warn" : "");
+    rosterStatus.textContent = !rosterDirty() ? "" : "ยังไม่ได้บันทึก" + (added.length ? " · เพิ่ม: " + added.join(", ") : "") + (removed.length ? " · ลบ: " + removed.join(", ") : "") + (draft.length < 2 ? " · ต้องมีอย่างน้อย 2 คน" : "");
+  }
+  function addName() {
+    const v = normName(newName.value); if (!v) return;
+    if (draft.includes(v)) { renderRoster("มีชื่อ \"" + v + "\" อยู่แล้ว", "warn"); return; }
+    if (draft.length >= MAX_NAMES) { renderRoster("ใส่ได้สูงสุด " + MAX_NAMES + " คน ถ้ามากกว่านี้ลูกบอลจะเล็กจนมองไม่เห็นบนมือถือ", "warn"); return; }
+    draft.push(v); newName.value = ""; renderRoster(); refreshOwner(); newName.focus();
+  }
   function refreshOwner() {
     if (owner.hidden) return;
+    renderRoster();
     const p = phase(nowS()), nextN = (REAL ? REAL.n : 0) + 1, moving = p === "countdown" || p === "running";
     copyBtn.disabled = !REAL || testing || p !== "done"; drawBtn.className = "act";
     testBtn.disabled = busy || moving; backBtn.hidden = !testing; backBtn.disabled = moving;
@@ -498,11 +618,11 @@ textarea { width: 100%; font: 13px var(--mono); }
   function randInt(n) { const max = Math.floor(0x100000000 / n) * n, b = new Uint32Array(1); do { crypto.getRandomValues(b); } while (b[0] >= max); return b[0] % n; }
   function shuffle(arr) { const x = arr.slice(); for (let i = x.length - 1; i > 0; i--) { const j = randInt(i + 1); [x[i], x[j]] = [x[j], x[i]]; } return x; }
   function makeRound(now, lead) {
-    const slotsShuffled = shuffle([...Array(B).keys()]);       // ball b starts in slot slotsShuffled[b]
+    const slotsShuffled = shuffle([...Array(B).keys()]);       // ball b starts on drum spot slotsShuffled[b]
     const seed = randInt(0x7fffffff);
     const sim = simulate(slotsShuffled, seed);
     return { n: (REAL ? REAL.n : 0) + 1, drawnAt: new Date(now).toISOString(), revealAt: now + (lead == null ? LEAD_MS : lead),
-      order: sim.order.map(b => ROSTER[b]), race: { start: slotsShuffled, seed, exitT: sim.exitT, frames: sim.frames } };
+      order: sim.order.map(b => ROSTER[b]), race: { v: 2, start: slotsShuffled, seed, exitT: sim.exitT, frames: sim.frames } };
   }
   const b64e = s => { const u = new TextEncoder().encode(s); let bin = ""; for (let i = 0; i < u.length; i += 0x8000) bin += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(bin); };
   const b64d = s => { const bin = atob(s.replace(/\s/g, "")), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); };
@@ -514,6 +634,8 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
   async function onDraw() {
     if (busy || !getToken()) return;
+    if (rosterDirty()) { status("warn", "มีการแก้รายชื่อที่ยังไม่ได้บันทึก กด \"บันทึกรายชื่อขึ้นเว็บ\" หรือ \"ยกเลิกการแก้\" ก่อนจับ"); return; }
+    if (pendingRoster) { status("warn", "รอเว็บอัปเดตรายชื่อใหม่ก่อน (ประมาณ 1 นาที) หน้านี้จะโหลดใหม่เอง"); return; }
     if (REAL && nowS() >= armedUntil) {
       armedUntil = nowS() + 6000; status("warn", "กดปุ่มสีส้มอีกครั้งภายใน 6 วินาทีเพื่อยืนยัน รอบเดิมจะยังอยู่ในประวัติให้ทุกคนเห็น");
       refreshOwner(); setTimeout(refreshOwner, 6100); return;
@@ -526,6 +648,7 @@ textarea { width: 100%; font: 13px var(--mono); }
       if (!r.ok) { busy = false; status("bad", ghError(r.status)); refreshOwner(); return; }
       const j = await r.json(); sha = j.sha; latest = JSON.parse(b64d(j.content));
     } catch (e) { busy = false; status("bad", "ติดต่อ GitHub ไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่"); refreshOwner(); return; }
+    if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) { busy = false; status("warn", "รายชื่อบน GitHub ไม่ตรงกับหน้านี้ กำลังโหลดรายชื่อล่าสุด…"); applyState(latest); return; }
     const lastN = latest.rounds.length ? latest.rounds[latest.rounds.length - 1].n : 0;
     if (lastN !== (REAL ? REAL.n : 0)) { busy = false; applyState(latest); status("warn", "บน GitHub มีรอบที่ " + lastN + " ที่หน้านี้ยังไม่เห็น โหลดให้แล้ว ตรวจดูก่อนกดอีกครั้ง"); return; }
     status("", "กำลังสุ่มและบันทึก…");
@@ -539,6 +662,25 @@ textarea { width: 100%; font: 13px var(--mono); }
     pendingN = round.n; applyState(next);
     status("", "บันทึกแล้ว · กำลังรอเว็บอัปเดตให้ทุกเครื่อง (ประมาณ 1 นาที) นับถอยหลังเผื่อไว้ 2 นาทีครึ่ง");
   }
+  async function onSaveRoster() {
+    if (busy || pendingRoster || !rosterDirty() || !getToken()) return;
+    const p = phase(nowS());
+    if (!testing && (p === "countdown" || p === "running")) { renderRoster("กำลังปล่อยลูกอยู่ รอให้จบก่อนแล้วค่อยบันทึกรายชื่อ", "warn"); return; }
+    busy = true; refreshOwner(); renderRoster("กำลังบันทึกรายชื่อ…");
+    const url = "https://api.github.com/repos/" + REPO + "/contents/" + PATH, headers = { Authorization: "Bearer " + getToken(), Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
+    try {
+      const r = await fetch(url + "?ref=" + BRANCH + "&t=" + Date.now(), { headers, cache: "no-store" });
+      if (!r.ok) { busy = false; refreshOwner(); renderRoster(ghError(r.status), "bad"); return; }
+      const j = await r.json(), latest = JSON.parse(b64d(j.content));
+      if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) { busy = false; renderRoster("มีคนแก้รายชื่อจากที่อื่นก่อนหน้า กำลังโหลดรายชื่อล่าสุด…", "warn"); applyState(latest); return; }
+      const next = { roster: draft.slice(), rounds: latest.rounds.map(x => ({ n: x.n, drawnAt: x.drawnAt, order: x.order })) };   // replays belong to the old list
+      const w = await fetch(url, { method: "PUT", headers, body: JSON.stringify({ message: "ANTA: แก้รายชื่อคนขับ (" + draft.length + " คน)", content: b64e(JSON.stringify(next)), sha: j.sha, branch: BRANCH }) });
+      busy = false;
+      if (!w.ok) { refreshOwner(); renderRoster(ghError(w.status), "bad"); return; }
+    } catch (e) { busy = false; refreshOwner(); renderRoster("ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วรีเฟรชดูรายชื่อ ก่อนกดใหม่", "warn"); return; }
+    pendingRoster = true; refreshOwner();
+    renderRoster("บันทึกแล้ว · รอเว็บอัปเดตประมาณ 1 นาที หน้านี้จะโหลดใหม่เองพร้อมลูกบอลและหลุมตามรายชื่อใหม่", "ok");
+  }
   async function onCopy() {
     if (!REAL) return;
     const text = "ANTA รอบที่ " + REAL.n + " · จับเมื่อ " + fmt(REAL.drawnAt) + "\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n");
@@ -546,8 +688,8 @@ textarea { width: 100%; font: 13px var(--mono); }
     catch (e) { copyArea.value = text; copyArea.hidden = false; copyArea.focus(); copyArea.select(); status("", "เลือกข้อความไว้แล้ว กดคัดลอกเอง"); }
   }
   function play(round, isTest, scroll) {   // switch what this screen shows; nothing is saved
-    testing = isTest; current = round; race = round && round.race ? round.race : null;
-    setRanks(); buildSched(); resetSlots(); armedUntil = 0;
+    testing = isTest; current = round; race = isTest ? round.race : replayOf(round);
+    setRanks(); buildSched(); buildSlots(round ? round.order.length : B); resetSlots(); armedUntil = 0;
     if (scroll) stage.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
     refreshOwner(); tick();
   }
@@ -556,7 +698,7 @@ textarea { width: 100%; font: 13px var(--mono); }
     STATE = st; REAL = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
     renderHistory();
     if (!testing && !running) play(REAL, false, false);
-    else if (!testing) { current = REAL; race = REAL && REAL.race ? REAL.race : null; setRanks(); buildSched(); }
+    else if (!testing) { current = REAL; race = replayOf(REAL); setRanks(); buildSched(); }
     refreshOwner();
   }
   async function poll() {
@@ -572,10 +714,16 @@ textarea { width: 100%; font: 13px var(--mono); }
   testBtn.addEventListener("click", () => { status("", "โหมดทดลอง: ไม่บันทึก คนอื่นไม่เห็น"); play(makeRound(nowS(), 3000), true, true); });
   backBtn.addEventListener("click", () => { status("", ""); play(REAL, false, true); });
   drawBtn.addEventListener("click", onDraw);
+  addBtn.addEventListener("click", addName);
+  newName.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); addName(); } });
+  resetRosterBtn.addEventListener("click", () => { draft = ROSTER.slice(); renderRoster(); refreshOwner(); });
+  saveRosterBtn.addEventListener("click", onSaveRoster);
   copyBtn.addEventListener("click", onCopy);
   saveTokenBtn.addEventListener("click", () => { const v = tokenInput.value.trim(); if (!v) return; try { localStorage.setItem(TOKEN_KEY, v); } catch (e) {} tokenInput.value = ""; showTokenState(); refreshOwner(); });
   clearTokenBtn.addEventListener("click", () => { try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} showTokenState(); refreshOwner(); });
   window.__antaSimulate = simulate;   // used only by tests
+  window.__antaSetup = setupBoard;     // used only by tests
+  window.__antaTune = o => { if (o.MIX_MS) MIX_MS = o.MIX_MS; if (o.SPIN_W) SPIN_W = o.SPIN_W; if (o.REV_AT != null) REV_AT = o.REV_AT; };   // tests only
 
   function showOwner() { owner.hidden = location.hash !== "#organiser"; showTokenState(); refreshOwner(); }
   window.addEventListener("hashchange", showOwner);
