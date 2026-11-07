@@ -102,7 +102,6 @@ textarea { width: 100%; font: 13px var(--mono); }
 <script id="app-js">
 (async function () {
   "use strict";
-  const SENDER_URL = "https://claude.ai/artifact/KNPkVGp6xKN3qu3GtH6ZNF";
   const LEAD_MS = 150000;  // countdown before the drum starts: GitHub needs ~1 minute to publish the new round to every phone
 
   // ================= board geometry (world units, 360 × 752) =================
@@ -312,13 +311,11 @@ textarea { width: 100%; font: 13px var(--mono); }
   owner.append(el("h2", null, "สำหรับผู้จัดคิว"));
   const ownerBtns = el("div", "btns");
   const drawBtn = el("button", "act", ""); drawBtn.type = "button"; drawBtn.id = "drawBtn";
-  const copyBtn = el("button", "act ghost", "คัดลอกผลไปส่งเข้า Sheet"); copyBtn.type = "button"; copyBtn.id = "copyBtn";
+  const copyBtn = el("button", "act ghost", "คัดลอกลำดับเป็นข้อความ (ส่งไลน์)"); copyBtn.type = "button"; copyBtn.id = "copyBtn";
   const testBtn = el("button", "act ghost", "ทดลองปล่อย (เห็นแค่เครื่องนี้ ไม่บันทึก)"); testBtn.type = "button"; testBtn.id = "testBtn";
   const backBtn = el("button", "act ghost", "กลับไปดูผลจริง"); backBtn.type = "button"; backBtn.id = "backBtn"; backBtn.hidden = true;
   ownerBtns.append(drawBtn, testBtn, backBtn, copyBtn);
   const ownerStatus = el("p", "status");
-  const senderP = el("p", "hint"); senderP.append("ส่งเข้า Sheet: คัดลอกผล แล้ววางในหน้า ");
-  const a = el("a", null, "ส่งผลเข้า Sheet"); a.href = SENDER_URL; a.target = "_blank"; a.rel = "noopener"; senderP.append(a);
   const copyArea = el("textarea"); copyArea.id = "copyArea"; copyArea.rows = 6; copyArea.readOnly = true; copyArea.hidden = true;
   const tokenRow = el("div", "tokenRow");
   const tokenInput = el("input"); tokenInput.id = "tokenInput"; tokenInput.type = "password"; tokenInput.autocomplete = "off"; tokenInput.placeholder = "วาง GitHub token (github_pat_…)";
@@ -338,7 +335,7 @@ textarea { width: 100%; font: 13px var(--mono); }
   const resetRosterBtn = el("button", "act ghost", "ยกเลิกการแก้"); resetRosterBtn.type = "button"; resetRosterBtn.id = "resetRosterBtn";
   rosterBtns.append(saveRosterBtn, resetRosterBtn);
   const rosterStatus = el("p", "status"); rosterStatus.id = "rosterStatus";
-  owner.append(ownerBtns, ownerStatus, senderP, copyArea, rosterH, rosterHint, rosterList, addRow, rosterBtns, rosterStatus, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
+  owner.append(ownerBtns, ownerStatus, copyArea, rosterH, rosterHint, rosterList, addRow, rosterBtns, rosterStatus, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
 
   function renderHistory() {
     hist.textContent = "";
@@ -683,8 +680,8 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
   async function onCopy() {
     if (!REAL) return;
-    const text = "ANTA รอบที่ " + REAL.n + " · จับเมื่อ " + fmt(REAL.drawnAt) + "\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n");
-    try { await navigator.clipboard.writeText(text); status("ok", "คัดลอกแล้ว เปิดหน้า \"ส่งผลเข้า Sheet\" แล้ววาง"); }
+    const text = "ลำดับคิว พขร. ANTA รอบที่ " + REAL.n + "\nจับเมื่อ " + fmt(REAL.drawnAt) + "\n\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n") + "\n\nดูย้อนหลัง: https://bullrock-group.com/anta/";
+    try { await navigator.clipboard.writeText(text); status("ok", "คัดลอกแล้ว วางในกลุ่มไลน์ได้เลย"); }
     catch (e) { copyArea.value = text; copyArea.hidden = false; copyArea.focus(); copyArea.select(); status("", "เลือกข้อความไว้แล้ว กดคัดลอกเอง"); }
   }
   function play(round, isTest, scroll) {   // switch what this screen shows; nothing is saved
