@@ -102,8 +102,8 @@ textarea { width: 100%; font: 13px var(--mono); }
 <script id="app-js">
 (async function () {
   "use strict";
-  const SENDER_URL = "https://claude.ai/artifact/KNPkVGp6xKN3qu3GtH6ZNF";
-  const LEAD_MS = 150000;  // countdown before the drum starts: GitHub needs ~1 minute to publish the new round to every phone
+  const LEAD_MS = 55000;   // drum starts this long after the organiser presses: GitHub Pages takes ~40 s to publish the round
+  const COUNT_MS = 10000;  // every phone shows at least this much countdown once the round reaches it
 
   // ================= board geometry (world units, 360 × 752) =================
   // drum (stage 1: mix) → pegs → funnel (one ball out at a time) → gutter → conveyor → cups
@@ -233,15 +233,22 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
 
   // ================= state =================
-  // Rounds live in round.json next to this page. Everyone polls it; the organiser writes it through the GitHub API.
+  // Data next to this page: round.json (list + history, small), replay.json (the latest race's recorded
+  // positions, downloaded once) and latest.json (a few bytes every phone checks every 2 s). The organiser
+  // writes all three in one commit through the GitHub API, so Pages publishes them together.
   let clockOffset = 0; const offs = [];
   function nowS() { return Date.now() + clockOffset; }   // server-synced clock so every phone opens the gate together
-  async function fetchState() {
-    const t0 = Date.now(), res = await fetch("round.json?t=" + t0, { cache: "no-store" }), t1 = Date.now();
+  async function getJSON(name) {
+    const t0 = Date.now(), res = await fetch(name + "?t=" + t0, { cache: "no-store" }), t1 = Date.now();
     if (!res.ok) throw new Error("http " + res.status);
     const d = res.headers.get("Date");
     if (d) { offs.push(Date.parse(d) + 500 - (t0 + t1) / 2); if (offs.length > 7) offs.shift(); const s = offs.slice().sort((a, b) => a - b); clockOffset = s[Math.floor(s.length / 2)]; }
     return res.json();
+  }
+  async function fetchState() {
+    const st = await getJSON("round.json"), last = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
+    if (last && !last.race) { try { const rp = await getJSON("replay.json"); if (rp && rp.drawnAt === last.drawnAt) last.race = rp.race; } catch (e) { /* no replay: shown as a finished result */ } }
+    return st;
   }
   let STATE;
   try { STATE = await fetchState(); }
@@ -253,6 +260,17 @@ textarea { width: 100%; font: 13px var(--mono); }
   const sameNames = (a, b) => a.length === b.length && a.slice().sort().join("\n") === b.slice().sort().join("\n");
   const replayOf = r => r && r.race && r.race.v === 2 && sameNames(r.order, ROSTER) ? r.race : null;   // only replays recorded on this board with this list
   let REAL = STATE.rounds.length ? STATE.rounds[STATE.rounds.length - 1] : null;   // the saved round everyone sees
+  const seen = new Map();   // when this phone first received each round (server clock)
+  const markSeen = r => { if (r && !seen.has(r.drawnAt)) seen.set(r.drawnAt, nowS()); };
+  markSeen(REAL);
+  // Start of the drum on this phone: the shared time when the round arrived early enough for a full countdown
+  // (every phone in sync), otherwise COUNT_MS after it arrived, so a slow update still shows the whole draw.
+  function startOf(r) {
+    if (!r) return 0;
+    if (testing) return r.revealAt;
+    const s = seen.get(r.drawnAt);
+    return s != null && s > r.revealAt - COUNT_MS && s < r.revealAt + 20000 ? Math.max(r.revealAt, s + COUNT_MS) : r.revealAt;
+  }
   let current = REAL, race = replayOf(REAL), testing = false;                        // what this screen is playing
   const isStale = r => !!(r && !sameNames(r.order, ROSTER));                         // list changed since that round was drawn
   const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -312,13 +330,11 @@ textarea { width: 100%; font: 13px var(--mono); }
   owner.append(el("h2", null, "สำหรับผู้จัดคิว"));
   const ownerBtns = el("div", "btns");
   const drawBtn = el("button", "act", ""); drawBtn.type = "button"; drawBtn.id = "drawBtn";
-  const copyBtn = el("button", "act ghost", "คัดลอกผลไปส่งเข้า Sheet"); copyBtn.type = "button"; copyBtn.id = "copyBtn";
+  const copyBtn = el("button", "act ghost", "คัดลอกลำดับเป็นข้อความ (ส่งไลน์)"); copyBtn.type = "button"; copyBtn.id = "copyBtn";
   const testBtn = el("button", "act ghost", "ทดลองปล่อย (เห็นแค่เครื่องนี้ ไม่บันทึก)"); testBtn.type = "button"; testBtn.id = "testBtn";
   const backBtn = el("button", "act ghost", "กลับไปดูผลจริง"); backBtn.type = "button"; backBtn.id = "backBtn"; backBtn.hidden = true;
   ownerBtns.append(drawBtn, testBtn, backBtn, copyBtn);
   const ownerStatus = el("p", "status");
-  const senderP = el("p", "hint"); senderP.append("ส่งเข้า Sheet: คัดลอกผล แล้ววางในหน้า ");
-  const a = el("a", null, "ส่งผลเข้า Sheet"); a.href = SENDER_URL; a.target = "_blank"; a.rel = "noopener"; senderP.append(a);
   const copyArea = el("textarea"); copyArea.id = "copyArea"; copyArea.rows = 6; copyArea.readOnly = true; copyArea.hidden = true;
   const tokenRow = el("div", "tokenRow");
   const tokenInput = el("input"); tokenInput.id = "tokenInput"; tokenInput.type = "password"; tokenInput.autocomplete = "off"; tokenInput.placeholder = "วาง GitHub token (github_pat_…)";
@@ -338,7 +354,7 @@ textarea { width: 100%; font: 13px var(--mono); }
   const resetRosterBtn = el("button", "act ghost", "ยกเลิกการแก้"); resetRosterBtn.type = "button"; resetRosterBtn.id = "resetRosterBtn";
   rosterBtns.append(saveRosterBtn, resetRosterBtn);
   const rosterStatus = el("p", "status"); rosterStatus.id = "rosterStatus";
-  owner.append(ownerBtns, ownerStatus, senderP, copyArea, rosterH, rosterHint, rosterList, addRow, rosterBtns, rosterStatus, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
+  owner.append(ownerBtns, ownerStatus, copyArea, rosterH, rosterHint, rosterList, addRow, rosterBtns, rosterStatus, el("h2", null, "สิทธิ์บันทึกผล"), tokenState, tokenRow); wrap.append(owner);
 
   function renderHistory() {
     hist.textContent = "";
@@ -511,7 +527,7 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
   function draw(now) {
     fit(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(staticLayer, 0, 0); ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    let e = current && race ? now - current.revealAt : -1;
+    let e = current && race ? now - startOf(current) : -1;
     if (current && race && reduced && e > 0 && e < END_MS) e = END_MS;
     drawBelt(e, e > MIX_MS && e < END_MS);
     const de = race ? e : -1;
@@ -539,11 +555,11 @@ textarea { width: 100%; font: 13px var(--mono); }
   function setSay(pos, name, text) { say.textContent = ""; if (pos) say.append(el("span", "pos", String(pos)), name); else say.textContent = text; }
   function phase(now) {
     if (!current || !race) return current ? "done" : "idle";
-    const e = now - current.revealAt; return e < 0 ? "countdown" : e < END_MS ? "running" : "done";
+    const e = now - startOf(current); return e < 0 ? "countdown" : e < END_MS ? "running" : "done";
   }
   function tick() {
     const now = nowS(), p = phase(now), e = draw(now);
-    if (p === "idle") { running = false; setSay(0, "", "รอผู้จัดคิวกดปล่อยลูกบอล"); hint.textContent = "เปิดหน้านี้ค้างไว้ได้เลย เมื่อผู้จัดคิวกด หน้านี้จะขึ้นนับถอยหลังเองภายในราว 1 นาที ไม่ต้องรีเฟรช"; return; }
+    if (p === "idle") { running = false; setSay(0, "", "รอผู้จัดคิวกดปล่อยลูกบอล"); hint.textContent = "เปิดหน้านี้ค้างไว้ได้เลย หลังผู้จัดคิวกดประมาณ 40 วินาที หน้านี้จะนับถอยหลัง 10 วินาทีแล้วเริ่มเอง ไม่ต้องรีเฟรช"; return; }
     if (p === "countdown") {
       running = true; setSay(0, "", tag() + " · ปล่อยลูกใน " + Math.ceil(-e / 1000) + " วินาที");
       hint.textContent = testing ? "โหมดทดลอง: เห็นแค่เครื่องนี้ ไม่บันทึก ไม่นับเป็นรอบ" : "นับถึง 0 วงล้อจะหมุนคละลูก แล้วเปิดปล่อยทุกลูกลงพร้อมกัน ผลคำนวณครั้งเดียวตอนผู้จัดคิวกด (" + fmt(current.drawnAt) + ") ทุกเครื่องเห็นภาพเดียวกัน";
@@ -571,7 +587,7 @@ textarea { width: 100%; font: 13px var(--mono); }
 
   // ================= organiser (open this page with #organiser) =================
   const REPO = "tanawat35/bullrock-group", PATH = "anta/round.json", BRANCH = "main", TOKEN_KEY = "anta-gh-token";
-  let armedUntil = 0, busy = false, pendingN = 0;
+  let armedUntil = 0, busy = false, pendingN = 0, pendingAt = 0;
   function status(cls, text) { ownerStatus.className = "status" + (cls ? " " + cls : ""); ownerStatus.textContent = text; }
   function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
   function showTokenState() { tokenState.textContent = getToken() ? "เครื่องนี้มี token แล้ว กดปล่อยจริงได้" : "ยังไม่มี token บนเครื่องนี้ ใส่ token ที่สร้างจาก GitHub (สิทธิ์เขียนเฉพาะ repo bullrock-group) เพื่อให้ปุ่มปล่อยจริงบันทึกผลได้"; }
@@ -632,6 +648,24 @@ textarea { width: 100%; font: 13px var(--mono); }
     if (code === 409 || code === 422) return "มีการบันทึกพร้อมกันจากที่อื่น รอสักครู่แล้วกดใหม่";
     return "GitHub ตอบกลับผิดปกติ (" + code + ") ยังไม่มีใครเห็นผลรอบนี้ ลองใหม่อีกครั้ง";
   }
+  // One commit with every file that changes, so GitHub Pages publishes them together.
+  // build(latest) gets round.json as of the branch head and returns {files, message} or throws {stale}.
+  async function ghWrite(build) {
+    const api = "https://api.github.com/repos/" + REPO, H = { Authorization: "Bearer " + getToken(), Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
+    const call = async (method, url, body) => {
+      const r = await fetch(url, { method, headers: H, cache: "no-store", body: body ? JSON.stringify(body) : undefined });
+      if (!r.ok) throw { status: r.status }; return r.json();
+    };
+    const ref = await call("GET", api + "/git/ref/heads/" + BRANCH + "?t=" + Date.now()), base = ref.object.sha;
+    const cur = await call("GET", api + "/contents/" + PATH + "?ref=" + base);
+    const out = build(JSON.parse(b64d(cur.content)));
+    const head = await call("GET", api + "/git/commits/" + base);
+    const tree = await call("POST", api + "/git/trees", { base_tree: head.tree.sha, tree: Object.keys(out.files).map(path => ({ path, mode: "100644", type: "blob", content: out.files[path] })) });
+    const commit = await call("POST", api + "/git/commits", { message: out.message, tree: tree.sha, parents: [base] });
+    await call("PATCH", api + "/git/refs/heads/" + BRANCH, { sha: commit.sha, force: false });   // refused if someone else saved in between
+  }
+  const strip = r => ({ n: r.n, drawnAt: r.drawnAt, revealAt: r.revealAt, order: r.order });
+  const lastOf = st => st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
   async function onDraw() {
     if (busy || !getToken()) return;
     if (rosterDirty()) { status("warn", "มีการแก้รายชื่อที่ยังไม่ได้บันทึก กด \"บันทึกรายชื่อขึ้นเว็บ\" หรือ \"ยกเลิกการแก้\" ก่อนจับ"); return; }
@@ -640,51 +674,56 @@ textarea { width: 100%; font: 13px var(--mono); }
       armedUntil = nowS() + 6000; status("warn", "กดปุ่มสีส้มอีกครั้งภายใน 6 วินาทีเพื่อยืนยัน รอบเดิมจะยังอยู่ในประวัติให้ทุกคนเห็น");
       refreshOwner(); setTimeout(refreshOwner, 6100); return;
     }
-    busy = true; refreshOwner(); status("", "กำลังอ่านข้อมูลล่าสุดจาก GitHub…");
-    const url = "https://api.github.com/repos/" + REPO + "/contents/" + PATH, headers = { Authorization: "Bearer " + getToken(), Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
-    let latest, sha;
+    busy = true; refreshOwner(); status("", "กำลังสุ่มและบันทึก…");
+    let round = null;
     try {
-      const r = await fetch(url + "?ref=" + BRANCH + "&t=" + Date.now(), { headers, cache: "no-store" });
-      if (!r.ok) { busy = false; status("bad", ghError(r.status)); refreshOwner(); return; }
-      const j = await r.json(); sha = j.sha; latest = JSON.parse(b64d(j.content));
-    } catch (e) { busy = false; status("bad", "ติดต่อ GitHub ไม่ได้ ตรวจอินเทอร์เน็ตแล้วลองใหม่"); refreshOwner(); return; }
-    if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) { busy = false; status("warn", "รายชื่อบน GitHub ไม่ตรงกับหน้านี้ กำลังโหลดรายชื่อล่าสุด…"); applyState(latest); return; }
-    const lastN = latest.rounds.length ? latest.rounds[latest.rounds.length - 1].n : 0;
-    if (lastN !== (REAL ? REAL.n : 0)) { busy = false; applyState(latest); status("warn", "บน GitHub มีรอบที่ " + lastN + " ที่หน้านี้ยังไม่เห็น โหลดให้แล้ว ตรวจดูก่อนกดอีกครั้ง"); return; }
-    status("", "กำลังสุ่มและบันทึก…");
-    const round = makeRound(nowS(), LEAD_MS);
-    const next = { roster: latest.roster, rounds: latest.rounds.map(r => ({ n: r.n, drawnAt: r.drawnAt, order: r.order })).concat([round]) };   // old replays dropped to keep the file small
-    try {
-      const r = await fetch(url, { method: "PUT", headers, body: JSON.stringify({ message: "ANTA: จับลำดับรอบที่ " + round.n, content: b64e(JSON.stringify(next)), sha, branch: BRANCH }) });
+      await ghWrite(latest => {
+        if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) throw { stale: latest, msg: "รายชื่อบน GitHub ไม่ตรงกับหน้านี้ กำลังโหลดรายชื่อล่าสุด…" };
+        const last = lastOf(latest), lastN = last ? last.n : 0;
+        if (lastN !== (REAL ? REAL.n : 0)) throw { stale: latest, msg: "บน GitHub มีรอบที่ " + lastN + " ที่หน้านี้ยังไม่เห็น โหลดให้แล้ว ตรวจดูก่อนกดอีกครั้ง" };
+        round = makeRound(nowS(), LEAD_MS);
+        const rev = (latest.rev || 0) + 1, slim = strip(round);
+        return { message: "ANTA: จับลำดับรอบที่ " + round.n, files: {
+          "anta/round.json": JSON.stringify({ rev, roster: latest.roster, rounds: latest.rounds.map(strip).concat([slim]) }),
+          "anta/replay.json": JSON.stringify({ n: round.n, drawnAt: round.drawnAt, race: round.race }),
+          "anta/latest.json": JSON.stringify({ rev, n: round.n, drawnAt: round.drawnAt }) } };
+      });
+    } catch (e) {
       busy = false;
-      if (!r.ok) { status("bad", ghError(r.status)); refreshOwner(); return; }
-    } catch (e) { busy = false; status("warn", "ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วดูว่ารอบที่ " + round.n + " ขึ้นในประวัติหรือยัง ก่อนกดใหม่"); refreshOwner(); return; }
-    pendingN = round.n; applyState(next);
-    status("", "บันทึกแล้ว · กำลังรอเว็บอัปเดตให้ทุกเครื่อง (ประมาณ 1 นาที) นับถอยหลังเผื่อไว้ 2 นาทีครึ่ง");
+      if (e && e.stale) { status("warn", e.msg); applyState(e.stale); return; }
+      if (e && e.status) status("bad", ghError(e.status));
+      else status("warn", "ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วดูว่ามีรอบใหม่ขึ้นในประวัติหรือยัง ก่อนกดใหม่");
+      refreshOwner(); return;
+    }
+    busy = false; pendingN = round.n; pendingAt = nowS(); refreshOwner();
+    status("", "ส่งแล้ว · รอเว็บอัปเดตประมาณ 40 วินาที แล้วทุกเครื่องจะนับถอยหลัง 10 วินาทีพร้อมกัน");
   }
   async function onSaveRoster() {
     if (busy || pendingRoster || !rosterDirty() || !getToken()) return;
     const p = phase(nowS());
     if (!testing && (p === "countdown" || p === "running")) { renderRoster("กำลังปล่อยลูกอยู่ รอให้จบก่อนแล้วค่อยบันทึกรายชื่อ", "warn"); return; }
     busy = true; refreshOwner(); renderRoster("กำลังบันทึกรายชื่อ…");
-    const url = "https://api.github.com/repos/" + REPO + "/contents/" + PATH, headers = { Authorization: "Bearer " + getToken(), Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" };
     try {
-      const r = await fetch(url + "?ref=" + BRANCH + "&t=" + Date.now(), { headers, cache: "no-store" });
-      if (!r.ok) { busy = false; refreshOwner(); renderRoster(ghError(r.status), "bad"); return; }
-      const j = await r.json(), latest = JSON.parse(b64d(j.content));
-      if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) { busy = false; renderRoster("มีคนแก้รายชื่อจากที่อื่นก่อนหน้า กำลังโหลดรายชื่อล่าสุด…", "warn"); applyState(latest); return; }
-      const next = { roster: draft.slice(), rounds: latest.rounds.map(x => ({ n: x.n, drawnAt: x.drawnAt, order: x.order })) };   // replays belong to the old list
-      const w = await fetch(url, { method: "PUT", headers, body: JSON.stringify({ message: "ANTA: แก้รายชื่อคนขับ (" + draft.length + " คน)", content: b64e(JSON.stringify(next)), sha: j.sha, branch: BRANCH }) });
-      busy = false;
-      if (!w.ok) { refreshOwner(); renderRoster(ghError(w.status), "bad"); return; }
-    } catch (e) { busy = false; refreshOwner(); renderRoster("ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วรีเฟรชดูรายชื่อ ก่อนกดใหม่", "warn"); return; }
+      await ghWrite(latest => {
+        if (JSON.stringify(latest.roster) !== JSON.stringify(ROSTER)) throw { stale: latest, msg: "มีคนแก้รายชื่อจากที่อื่นก่อนหน้า กำลังโหลดรายชื่อล่าสุด…" };
+        const rev = (latest.rev || 0) + 1, last = lastOf(latest);
+        return { message: "ANTA: แก้รายชื่อคนขับ (" + draft.length + " คน)", files: {
+          "anta/round.json": JSON.stringify({ rev, roster: draft.slice(), rounds: latest.rounds.map(strip) }),   // replays belong to the old list
+          "anta/latest.json": JSON.stringify({ rev, n: last ? last.n : 0, drawnAt: last ? last.drawnAt : null }) } };
+      });
+    } catch (e) {
+      busy = false; refreshOwner();
+      if (e && e.stale) { renderRoster(e.msg, "warn"); applyState(e.stale); return; }
+      renderRoster(e && e.status ? ghError(e.status) : "ไม่แน่ใจว่าบันทึกสำเร็จหรือไม่ รอ 1 นาทีแล้วรีเฟรชดูรายชื่อ ก่อนกดใหม่", e && e.status ? "bad" : "warn"); return;
+    }
+    busy = false;
     pendingRoster = true; refreshOwner();
     renderRoster("บันทึกแล้ว · รอเว็บอัปเดตประมาณ 1 นาที หน้านี้จะโหลดใหม่เองพร้อมลูกบอลและหลุมตามรายชื่อใหม่", "ok");
   }
   async function onCopy() {
     if (!REAL) return;
-    const text = "ANTA รอบที่ " + REAL.n + " · จับเมื่อ " + fmt(REAL.drawnAt) + "\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n");
-    try { await navigator.clipboard.writeText(text); status("ok", "คัดลอกแล้ว เปิดหน้า \"ส่งผลเข้า Sheet\" แล้ววาง"); }
+    const text = "ลำดับคิว พขร. ANTA รอบที่ " + REAL.n + "\nจับเมื่อ " + fmt(REAL.drawnAt) + "\n\n" + REAL.order.map((n, i) => (i + 1) + ". " + n).join("\n") + "\n\nดูย้อนหลัง: https://bullrock-group.com/anta/";
+    try { await navigator.clipboard.writeText(text); status("ok", "คัดลอกแล้ว วางในกลุ่มไลน์ได้เลย"); }
     catch (e) { copyArea.value = text; copyArea.hidden = false; copyArea.focus(); copyArea.select(); status("", "เลือกข้อความไว้แล้ว กดคัดลอกเอง"); }
   }
   function play(round, isTest, scroll) {   // switch what this screen shows; nothing is saved
@@ -695,21 +734,32 @@ textarea { width: 100%; font: 13px var(--mono); }
   }
   function applyState(st) {
     if (JSON.stringify(st.roster) !== JSON.stringify(ROSTER)) { location.reload(); return; }   // driver list changed
-    STATE = st; REAL = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
+    STATE = st; REAL = st.rounds.length ? st.rounds[st.rounds.length - 1] : null; markSeen(REAL);
     renderHistory();
     if (!testing && !running) play(REAL, false, false);
     else if (!testing) { current = REAL; race = replayOf(REAL); setRanks(); buildSched(); }
     refreshOwner();
   }
+  let knownRev = STATE.rev != null ? STATE.rev : null, polls = 0, polling = false;
   async function poll() {
+    if (polling) return; polling = true;
     try {
-      const st = await fetchState();
-      const a = st.rounds.length ? st.rounds[st.rounds.length - 1] : null;
-      if ((a && a.drawnAt) !== (REAL && REAL.drawnAt) || st.rounds.length !== STATE.rounds.length) applyState(st);
-      if (pendingN && a && a.n === pendingN) { pendingN = 0; status("ok", "เว็บอัปเดตแล้ว คนขับทุกเครื่องเห็นนับถอยหลังแล้ว"); }
+      let full = ++polls % 15 === 0;   // full check every ~30 s as a safety net
+      if (!full) { try { const lt = await getJSON("latest.json"); if (lt.rev !== knownRev) full = true; } catch (e) { full = true; } }
+      if (full) {
+        const st = await fetchState(), a = lastOf(st);
+        if (st.rev != null) knownRev = st.rev;
+        else { try { knownRev = (await getJSON("latest.json")).rev; } catch (e) { /* older data without latest.json */ } }
+        if ((a && a.drawnAt) !== (REAL && REAL.drawnAt) || st.rounds.length !== STATE.rounds.length || JSON.stringify(st.roster) !== JSON.stringify(ROSTER)) applyState(st);
+      }
+      if (pendingN) {
+        if (REAL && REAL.n === pendingN) { pendingN = 0; status("ok", "เว็บอัปเดตแล้ว ทุกเครื่องกำลังนับถอยหลังพร้อมกัน"); }
+        else { const w = Math.round((nowS() - pendingAt) / 1000); status(w > 90 ? "warn" : "", w > 90 ? "เว็บยังไม่อัปเดตหลัง " + w + " วินาที (GitHub ช้ากว่าปกติ) รอต่อได้ ผลถูกบันทึกแล้ว" : "ส่งแล้ว · รอเว็บอัปเดต… " + w + " วินาที แล้วทุกเครื่องจะนับถอยหลัง 10 วินาทีพร้อมกัน"); }
+      }
     } catch (e) { /* try again next round */ }
+    polling = false;
   }
-  setInterval(poll, 5000);
+  setInterval(poll, 2000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) poll(); });
   testBtn.addEventListener("click", () => { status("", "โหมดทดลอง: ไม่บันทึก คนอื่นไม่เห็น"); play(makeRound(nowS(), 3000), true, true); });
   backBtn.addEventListener("click", () => { status("", ""); play(REAL, false, true); });
